@@ -37,5 +37,6 @@ export default {
 
 .btn:hover {
   background-color: rgb(70, 70, 70);
+  cursor: pointer;
 }
 </style>

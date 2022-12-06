@@ -2,29 +2,32 @@
   <div class="calc">
     <div class="inputDisplay">
       <h1>Simple calculator</h1>
-      <the-calculator :clacInput="this.calcString"></the-calculator>
+      <the-calculator
+        :strInput="this.calcString"
+        @stringChanged="handleChange"
+      ></the-calculator>
     </div>
     <div class="buttons">
       <simple-button
-        @handleClick="addOperation()"
+        @handleClick="addOperation"
         :calcOperation="'+'"
       ></simple-button>
       <simple-button
-        @handleClick="addOperation()"
+        @handleClick="addOperation"
         :calcOperation="'-'"
       ></simple-button>
       <simple-button
-        @handleClick="addOperation()"
+        @handleClick="addOperation"
         :calcOperation="'*'"
       ></simple-button>
       <simple-button
-        @handleClick="addOperation()"
+        @handleClick="addOperation"
         :calcOperation="'/'"
       ></simple-button>
     </div>
     <div class="equal">
       <simple-button
-        @handleClick="addOperation()"
+        @handleClick="addOperation"
         :calcOperation="'='"
       ></simple-button>
     </div>
@@ -48,8 +51,10 @@ export default {
   },
   methods: {
     addOperation(operation) {
-      console.log(operation);
       this.calcString += operation;
+    },
+    handleChange(str) {
+      this.calcString = str;
     },
   },
 };
