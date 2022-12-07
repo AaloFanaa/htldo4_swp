@@ -1,0 +1,19 @@
+.btn {
+  width: 20%;
+  height: 3.5rem;
+  aspect-ratio: 2;
+  background-color: rgb(50, 50, 50);
+  color: aqua;
+  text-align: center;
+  font-size: 1.5rem;
+  border-radius: 1rem;
+  border: 1px solid aqua;
+  line-height: 3.5rem;
+  transition: all 0.3s;
+  font-size: 2rem;
+}
+
+.btn:hover {
+  background-color: rgb(70, 70, 70);
+  cursor: pointer;
+}
