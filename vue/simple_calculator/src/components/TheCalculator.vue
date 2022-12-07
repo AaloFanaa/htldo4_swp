@@ -8,9 +8,15 @@ export default {
   props: {
     strInput: {
       type: String,
-      default: '',
     },
   },
+  watch: {
+    strInput: function (newVal, oldVal) {
+      this.calcString = this.strInput;
+      console.log('Prop changed: ', newVal, ' | was: ', oldVal);
+    },
+  },
+
   methods: {
     stringChanged() {
       this.$emit('stringChanged', this.calcString);
@@ -20,14 +26,6 @@ export default {
     return {
       calcString: '',
     };
-  },
-  watch: {
-    strInput: {
-      function() {
-        this.calcString = this.strInput;
-        console.log(this.calcString);
-      },
-    },
   },
 };
 </script>

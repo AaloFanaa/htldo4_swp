@@ -51,7 +51,12 @@ export default {
   },
   methods: {
     addOperation(operation) {
-      this.calcString += operation;
+      if (operation !== '=') {
+        console.log('Operation: ' + operation);
+        this.calcString += operation;
+      } else {
+        this.calcString = eval(this.calcString);
+      }
     },
     handleChange(str) {
       this.calcString = str;
