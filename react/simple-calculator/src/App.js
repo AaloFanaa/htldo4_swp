@@ -14,7 +14,7 @@ function App() {
           <TheCalculator
             strChange={(temp) => {
               setCalcString(temp);
-              console.log(calcString);
+              console.log('Parent val: ' + calcString);
             }}
             strInput={calcString}
           ></TheCalculator>
@@ -34,13 +34,13 @@ function App() {
           ></SimpleButton>
           <SimpleButton
             handleClick={(temp) => {
-              setCalcString(calcString + temp);
+              setCalcString(calcString + '*');
             }}
             operator="x"
           ></SimpleButton>
           <SimpleButton
             handleClick={(temp) => {
-              setCalcString(calcString + temp);
+              setCalcString(calcString, temp);
             }}
             operator="/"
           ></SimpleButton>
@@ -51,6 +51,7 @@ function App() {
             handleClick={(temp) => {
               setCalcString(calcString + temp);
               let sol = eval(calcString);
+              console.log(sol);
               setCalcString(sol);
             }}
           ></SimpleButton>

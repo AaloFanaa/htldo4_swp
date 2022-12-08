@@ -1,12 +1,16 @@
 import styles from './TheCalculator.module.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 function TheCalculator(props) {
-  const [strCalc, setStrCalc] = useState(props.strInput);
+  const [strCalc, setStrCalc] = useState('');
+
+  useEffect(() => {
+    setStrCalc(props.strInput);
+  }, [props.strInput]);
 
   const handleChange = (event) => {
     setStrCalc(event.target.value);
-    props.strChange(strCalc);
+    props.strChange(event.target.value);
   };
 
   return (
@@ -14,9 +18,9 @@ function TheCalculator(props) {
       onChange={(e) => {
         handleChange(e);
       }}
-      className={styles.inputCalc}
       type="text"
       value={strCalc}
+      className={styles.inputCalc}
     />
   );
 }
