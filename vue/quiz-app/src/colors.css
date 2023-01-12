@@ -1,6 +1,10 @@
 :root {
-  --bgClr: #aec6cf;
-  --headClr: #38555f;
-  --textClr: #000000;
-  --highlightClr: #5b8899;
+  --bgClr: #101010;
+  --headClr: #50c878;
+  --textClr: #ffffff;
+  --highlightClr: #606060;
+  --fgClr: #202020;
+  --playClr: #001757;
+  --deleteClr: #d12020;
+  --editClr: #0aad0a;
 }

@@ -1,6 +1,12 @@
 <template>
-  <div class="headWrapper">
-    <span class="headText"> {{ this.textHeader }}</span>
+  <div
+    @mouseenter="handleHoverBegin()"
+    @mouseleave="handleHoverEnd()"
+    class="headWrapper"
+  >
+    <span v-if="this.isHovered === false" class="headText">
+      {{ this.textHeader }}</span
+    >
   </div>
 </template>
 
@@ -9,7 +15,21 @@ export default {
   props: {
     textHeader: {
       type: String,
-      default: 'Welcome!',
+      default: 'Quiz!',
+    },
+  },
+  data() {
+    return {
+      isHovered: true,
+    };
+  },
+  methods: {
+    handleHoverBegin() {
+      this.isHovered == true;
+    },
+    handleHoverEnd() {
+      this.isHovered == false;
+      console.log(this.isHovered);
     },
   },
 };
@@ -17,12 +37,16 @@ export default {
 
 <style>
 .headWrapper {
-  width: 100%;
+  width: 50%;
   height: 10vh;
   color: var(--headerClr);
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: var(--headClr);
+  margin-top: 1.5rem;
+  border-radius: 5rem;
+  position: absolute;
+  bottom: 2.5rem;
 }
 </style>
