@@ -1,8 +1,9 @@
 <template>
   <site-header :textHeader="this.pageState.displayValue"></site-header>
   <quiz-display
-    v-for="item in this.quizList"
-    :name="item.displayName"
+    v-for="quiz in this.quizList"
+    :key="quiz.name"
+    :name="quiz.displayName"
   ></quiz-display>
 </template>
 
@@ -25,7 +26,7 @@ export default {
     return {
       // Needed to keep track of the current page state
       pageState: { value: 'std', displayValue: 'Welcome!' },
-      quizList: [],
+      quizList: {},
     };
   },
   created() {
@@ -37,9 +38,7 @@ export default {
       })
       .then((data) => {
         console.log(data);
-        for (item in data) {
-          this.quizList.push(data);
-        }
+        this.quizList = data;
       });
   },
 };
