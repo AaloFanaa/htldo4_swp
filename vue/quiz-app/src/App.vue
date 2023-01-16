@@ -1,14 +1,20 @@
 <template>
+  <div
+    v-if="this.pageState.value !== 'std'"
+    class="homeBtn"
+    @click="setToStdPage"
+  >
+    Home
+  </div>
   <div v-if="this.pageState.value === 'std'" class="stdDisplayWrapper">
-    <div class="quizDisplayWrapper">
-      <quiz-display
-        v-for="quiz in this.quizList"
-        :key="quiz.name"
-        :name="quiz.displayName"
-        :id="quiz.id"
-        @clickHandle="handlePageChange"
-      ></quiz-display>
-    </div>
+    <quiz-display
+      v-for="quiz in this.quizList"
+      :key="quiz.name"
+      :name="quiz.displayName"
+      :id="quiz.id"
+      @clickHandle="handlePageChange"
+    ></quiz-display>
+    <img @click="handleAddQuiz" class="addBtn" src="./assets/plus.svg" />
   </div>
   <quiz-edit
     v-if="this.pageState.value === 'edit'"
@@ -41,16 +47,7 @@ export default {
     };
   },
   created() {
-    fetch(
-      'https://quiz-app-bce68-default-rtdb.europe-west1.firebasedatabase.app/quizzes.json'
-    )
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        console.log(data);
-        this.quizList = data;
-      });
+    this.fetchQuizzes();
   },
   methods: {
     handlePageChange(id, btnType) {
@@ -74,6 +71,38 @@ export default {
     setToStdPage() {
       this.pageState = { value: 'std', displayValue: 'Hover me!' };
     },
+    handleAddQuiz() {
+      let quizName = prompt('Enter the name of the quiz:');
+      let id = quizName.replace(/\s+/g, '').toLowerCase();
+      fetch(
+        `https://quiz-app-bce68-default-rtdb.europe-west1.firebasedatabase.app/quizzes.json`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            displayName: quizName,
+            id: id,
+          }),
+        }
+      ).then((res) => {
+        console.log(res);
+      });
+      this.fetchQuizzes();
+    },
+    fetchQuizzes() {
+      fetch(
+        'https://quiz-app-bce68-default-rtdb.europe-west1.firebasedatabase.app/quizzes.json'
+      )
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          console.log(data);
+          this.quizList = data;
+        });
+    },
   },
 };
 </script>
@@ -93,8 +122,7 @@ html {
 }
 
 #app {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-    Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-family: 'Quicksand', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -106,21 +134,58 @@ html {
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  position: relative;
 }
 
-.quizDisplayWrapper {
+.stdDisplayWrapper::-webkit-scrollbar {
+  width: 0.8rem;
+}
+
+.stdDisplayWrapper::-webkit-scrollbar-track {
+  background: var(--fgHighClr);
+  border-radius: 5rem;
+}
+
+.stdDisplayWrapper::-webkit-scrollbar-thumb {
+  background: var(--textClr);
+  border-radius: 5rem;
+}
+
+.stdDisplayWrapper {
+  width: 50%;
+  height: 50%;
+  background-color: var(--fgClr);
+  border-radius: 1rem;
+  overflow-y: scroll;
+  overflow-x: hidden;
   display: flex;
-  height: 60%;
-  justify-content: space-evenly;
   flex-direction: column;
   align-items: center;
 }
 
-.stdDisplayWrapper {
-  margin-top: 1.5rem;
-  width: 50%;
-  min-height: 50%;
-  background-color: var(--fgClr);
-  border-radius: 1rem;
+.homeBtn {
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+  background-color: var(--redClr);
+  border-radius: 5rem;
+  padding: 1.2rem;
+  cursor: pointer;
+}
+
+.homeBtn:hover {
+  background-color: var(--redHighClr);
+}
+
+.addBtn {
+  aspect-ratio: 1;
+  height: 5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  padding: 2rem;
+}
+
+.addBtn:hover {
+  scale: 1.15;
 }
 </style>

@@ -2,9 +2,11 @@
   --bgClr: #101010;
   --headClr: #50c878;
   --textClr: #ffffff;
-  --highlightClr: #606060;
+  --bgHighClr: #2f2f2f;
+  --fgHighClr: #3f3f3f;
   --fgClr: #202020;
   --playClr: #001757;
-  --deleteClr: #d12020;
+  --redClr: #d12020;
+  --redHighClr: #e83939;
   --editClr: #0aad0a;
 }

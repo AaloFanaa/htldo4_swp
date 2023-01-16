@@ -1,7 +1,6 @@
 <template>
   <div class="displayWrapper">
     <span class="name"> {{ this.name }}</span>
-    <!-- TO DO: Add number of questions -->
     <div class="btnWrapper">
       <span @click="pageChangeClick($event)" id="play" class="btn">Play</span>
       <span @click="pageChangeClick($event)" id="edit" class="btn">Edit</span>
@@ -26,6 +25,7 @@ export default {
   methods: {
     pageChangeClick(e) {
       this.$emit('clickHandle', this.id, e.srcElement.id);
+      console.log(this.name);
     },
   },
 };
@@ -40,12 +40,13 @@ export default {
   align-items: center;
   background-color: var(--fgClr);
   transition: all 0.3s;
-  border-bottom: 1px solid var(--highlightClr);
+  border-bottom: 1px solid var(--textClr);
+  margin-top: 1.5rem;
 }
+
 .displayWrapper:hover {
-  box-shadow: 0px 0px 15px 7px rgba(0, 0, 0, 0.1);
-  width: 92%;
-  height: 33%;
+  scale: 1.02;
+  background-color: var(--bgHighClr);
 }
 
 .name {
@@ -69,5 +70,11 @@ export default {
   justify-content: center;
   align-items: center;
   text-align: center;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn:hover {
+  font-size: 3.3rem;
 }
 </style>
