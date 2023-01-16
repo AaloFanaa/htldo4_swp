@@ -9,9 +9,9 @@
   <div v-if="this.pageState.value === 'std'" class="stdDisplayWrapper">
     <quiz-display
       v-for="quiz in this.quizList"
-      :key="quiz.name"
-      :name="quiz.displayName"
-      :id="quiz.id"
+      :key="quiz[0]"
+      :name="quiz[1].displayName"
+      :id="quiz[1].id"
       @clickHandle="handlePageChange"
     ></quiz-display>
     <img @click="handleAddQuiz" class="addBtn" src="./assets/plus.svg" />
@@ -20,7 +20,6 @@
     v-if="this.pageState.value === 'edit'"
     :id="this.selectedQuiz"
   ></quiz-edit>
-  <site-header :textHeader="this.pageState.displayValue"></site-header>
 </template>
 
 <script>
@@ -42,7 +41,7 @@ export default {
     return {
       // Needed to keep track of the current page state
       pageState: { value: 'std', displayValue: 'Hover me!' },
-      quizList: {},
+      quizList: [],
       selectedQuiz: null,
     };
   },
@@ -63,8 +62,19 @@ export default {
           console.log('Changing page...');
           break;
         case 'del':
-          alert('Are you sure about that??');
-          //Delete
+          // if (confirm('Are you sure you want to delete this Quiz')) {
+          //   fetch(
+          //     `https://quiz-app-bce68-default-rtdb.europe-west1.firebasedatabase.app/quizzes/${id}.json`,
+          //     {
+          //       method: 'DELETE',
+          //       headers: {
+          //         'Content-Type': 'application/json',
+          //       },
+          //     }
+          //   ).then((res) => {
+          //     console.log(res);
+          //   });
+          // }
           break;
       }
     },
@@ -91,16 +101,18 @@ export default {
       });
       this.fetchQuizzes();
     },
-    fetchQuizzes() {
-      fetch(
+    async fetchQuizzes() {
+      await fetch(
         'https://quiz-app-bce68-default-rtdb.europe-west1.firebasedatabase.app/quizzes.json'
       )
         .then((response) => {
           return response.json();
         })
         .then((data) => {
-          console.log(data);
-          this.quizList = data;
+          this.quizList = [];
+          for (let i = 0; i < Object.entries(data).length; i++) {
+            this.quizList[i] = Object.entries(data)[i];
+          }
         });
     },
   },

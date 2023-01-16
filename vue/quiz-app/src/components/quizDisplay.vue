@@ -11,7 +11,7 @@
 
 <script>
 export default {
-  emits: ['changePage'],
+  emits: ['clickHandle'],
   props: {
     name: {
       type: String,
@@ -24,8 +24,8 @@ export default {
   },
   methods: {
     pageChangeClick(e) {
+      console.log(this.$vnode.key);
       this.$emit('clickHandle', this.id, e.srcElement.id);
-      console.log(this.name);
     },
   },
 };
