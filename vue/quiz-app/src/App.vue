@@ -10,6 +10,7 @@
     <quiz-display
       v-for="quiz in this.quizList"
       :key="quiz[0]"
+      :quizId="quiz[0]"
       :name="quiz[1].displayName"
       :id="quiz[1].id"
       @clickHandle="handlePageChange"
@@ -49,7 +50,7 @@ export default {
     this.fetchQuizzes();
   },
   methods: {
-    handlePageChange(id, btnType) {
+    handlePageChange(id, btnType, quizId) {
       switch (btnType) {
         case 'play':
           this.pageState = { vlaue: 'play', displayValue: 'Good luck!' };
@@ -62,19 +63,19 @@ export default {
           console.log('Changing page...');
           break;
         case 'del':
-          // if (confirm('Are you sure you want to delete this Quiz')) {
-          //   fetch(
-          //     `https://quiz-app-bce68-default-rtdb.europe-west1.firebasedatabase.app/quizzes/${id}.json`,
-          //     {
-          //       method: 'DELETE',
-          //       headers: {
-          //         'Content-Type': 'application/json',
-          //       },
-          //     }
-          //   ).then((res) => {
-          //     console.log(res);
-          //   });
-          // }
+          if (confirm('Are you sure you want to delete this Quiz')) {
+            fetch(
+              `https://quiz-app-bce68-default-rtdb.europe-west1.firebasedatabase.app/quizzes/${quizId}.json`,
+              {
+                method: 'DELETE',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+              }
+            ).then((res) => {
+              console.log(res);
+            });
+          }
           break;
       }
     },

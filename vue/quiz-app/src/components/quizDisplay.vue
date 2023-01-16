@@ -21,11 +21,14 @@ export default {
       type: String,
       required: true,
     },
+    quizId: {
+      type: String,
+      required: true,
+    },
   },
   methods: {
     pageChangeClick(e) {
-      console.log(this.$vnode.key);
-      this.$emit('clickHandle', this.id, e.srcElement.id);
+      this.$emit('clickHandle', this.id, e.srcElement.id, this.quizId);
     },
   },
 };
