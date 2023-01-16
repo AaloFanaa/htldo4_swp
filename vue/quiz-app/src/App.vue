@@ -19,7 +19,7 @@
   </div>
   <quiz-edit
     v-if="this.pageState.value === 'edit'"
-    :id="this.selectedQuiz"
+    :quizId="this.selectedQuiz"
   ></quiz-edit>
 </template>
 
@@ -50,16 +50,16 @@ export default {
     this.fetchQuizzes();
   },
   methods: {
-    handlePageChange(id, btnType, quizId) {
+    handlePageChange(btnType, quizId) {
       switch (btnType) {
         case 'play':
           this.pageState = { vlaue: 'play', displayValue: 'Good luck!' };
-          this.selectedQuiz = id;
+          this.selectedQuiz = quizId;
           console.log('Changing page...');
           break;
         case 'edit':
           this.pageState = { value: 'edit', displayValue: 'Edit quiz!' };
-          this.selectedQuiz = id;
+          this.selectedQuiz = quizId;
           console.log('Changing page...');
           break;
         case 'del':
@@ -75,6 +75,7 @@ export default {
             ).then((res) => {
               console.log(res);
             });
+            this.fetchQuizzes();
           }
           break;
       }
@@ -182,12 +183,14 @@ html {
   left: 2rem;
   background-color: var(--redClr);
   border-radius: 5rem;
-  padding: 1.2rem;
+  padding: 2rem;
   cursor: pointer;
+  transition: all 0.3s;
 }
 
 .homeBtn:hover {
   background-color: var(--redHighClr);
+  scale: 1.07;
 }
 
 .addBtn {

@@ -1,37 +1,21 @@
 <template>
-  <div
-    @mouseenter="handleHoverBegin()"
-    @mouseleave="handleHoverEnd()"
-    class="headWrapper"
-  >
-    <span v-if="this.isHovered === false" class="headText">
-      {{ this.textHeader }}</span
-    >
+  <div class="headWrapper">
+    <span>Editing quiz: {{ this.quizName }}</span>
   </div>
 </template>
 
 <script>
 export default {
   props: {
-    textHeader: {
+    quizName: {
       type: String,
       default: 'Quiz!',
     },
   },
   data() {
-    return {
-      isHovered: true,
-    };
+    return {};
   },
-  methods: {
-    handleHoverBegin() {
-      this.isHovered == true;
-    },
-    handleHoverEnd() {
-      this.isHovered == false;
-      console.log(this.isHovered);
-    },
-  },
+  methods: {},
 };
 </script>
 
@@ -47,6 +31,6 @@ export default {
   margin-top: 1.5rem;
   border-radius: 5rem;
   position: absolute;
-  bottom: 2.5rem;
+  top: 2.5rem;
 }
 </style>

@@ -28,7 +28,7 @@ export default {
   },
   methods: {
     pageChangeClick(e) {
-      this.$emit('clickHandle', this.id, e.srcElement.id, this.quizId);
+      this.$emit('clickHandle', e.srcElement.id, this.quizId);
     },
   },
 };
@@ -37,7 +37,7 @@ export default {
 <style>
 .displayWrapper {
   display: flex;
-  height: 30%;
+  min-height: 9rem;
   width: 90%;
   justify-content: space-between;
   align-items: center;
