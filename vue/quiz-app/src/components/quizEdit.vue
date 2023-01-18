@@ -2,14 +2,19 @@
   <site-header :quizName="this.quizName"></site-header>
   <div class="questionDisplayWrapper">
     <div class="questionFormWrapper" v-for="item in this.questions" :key="item">
-      <span class="questionText">{{ item[1].questionText }}</span>
-      <div class="questionWrapper">
-        <input
-          v-for="question in item[1]"
-          class="answerText"
-          type="text"
-          :key="question.answer"
-        /><input class="answerCheck" type="checkbox" />
+      <input
+        type="text"
+        class="questionText"
+        v-model="item[1].questionText"
+        placeholder="Question..."
+      />
+      <div
+        class="questionWrapper"
+        v-for="question in item[1]"
+        :key="question.answer"
+      >
+        <input class="answerText" type="text" placeholder="Answer..." />
+        <input class="answerCheck" type="checkbox" />
       </div>
     </div>
   </div>
@@ -47,16 +52,21 @@ export default {
 
         //Parsing the questions to an array
         this.questions = [];
-        for (let i = 0; i < Object.entries(data).length - 1; i++) {
+        for (let i = 0; i < Object.entries(data).length; i++) {
           this.questions[i] = Object.entries(data.questions)[i];
         }
       });
     console.log(this.questions);
   },
+  methods: {
+    logQuestion(e) {
+      console.log(e);
+    },
+  },
 };
 </script>
 
-<style>
+<style scoped>
 .questionDisplayWrapper::-webkit-scrollbar {
   width: 0.8rem;
 }
@@ -83,35 +93,70 @@ export default {
   align-items: center;
 }
 
-.questionDisplayWrapper {
-  overflow: hidden;
-}
-
 .questionFormWrapper {
   display: flex;
-  min-height: 9rem;
   width: 90%;
+  height: auto;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   background-color: var(--fgColor);
   transition: all 0.3s;
-  margin-top: 1.5rem;
-  border: 1px solid white;
+  margin-top: 3rem;
+  padding: 1.5rem;
 }
 
 .questionText {
+  padding: 1.5rem;
+  width: calc(100% - 3rem);
+  text-align: left;
+  font-size: 2rem;
+  height: 6rem;
 }
 
 .questionWrapper {
-  display: grid;
-  grid-template-columns: 70% 30%;
+  display: flex;
+  width: 100%;
+  margin-top: 1.5rem;
+  justify-content: space-between;
 }
 
 .answerText {
-  width: 95%;
+  padding: 1.5rem;
+  width: 85%;
+  height: 4rem;
+  font-size: 2rem;
 }
 
+/* Toggle button styling */
 .answerCheck {
+  height: 100%;
+  width: 10%;
+  align-self: center;
+  opacity: 0;
+  position: relative;
+}
+
+.answerCheck::after {
+  position: absolute;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: transparent;
+  border: 1px solid var(--textColor);
+}
+
+/* text input style */
+input[type='text'] {
+  border: 1px solid var(--textColor);
+  background-color: var(--fgtColor);
+  color: var(--textColor);
+  outline: none;
+  transition: all 0.3s;
+}
+
+input[type='text']:hover {
+  scale: 1.015;
+  background-color: var(--fgHighlightColor);
 }
 </style>
