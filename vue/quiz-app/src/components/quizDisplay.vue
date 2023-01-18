@@ -41,15 +41,15 @@ export default {
   width: 90%;
   justify-content: space-between;
   align-items: center;
-  background-color: var(--fgClr);
+  background-color: var(--fgColor);
   transition: all 0.3s;
-  border-bottom: 1px solid var(--textClr);
+  border-bottom: 1px solid var(--textColor);
   margin-top: 1.5rem;
 }
 
 .displayWrapper:hover {
   scale: 1.02;
-  background-color: var(--bgHighClr);
+  background-color: var(--bgHighlightColor);
 }
 
 .name {

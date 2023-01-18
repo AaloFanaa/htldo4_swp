@@ -131,7 +131,7 @@ html {
   height: 100vh;
   width: 100%;
   overflow: hidden;
-  background-color: var(--bgClr);
+  background-color: var(--bgColor);
   font-size: 10px;
 }
 
@@ -140,7 +140,7 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: var(--textClr);
+  color: var(--textColor);
   font-size: 3rem;
   width: 100%;
   height: 100%;
@@ -156,19 +156,19 @@ html {
 }
 
 .stdDisplayWrapper::-webkit-scrollbar-track {
-  background: var(--fgHighClr);
+  background: var(--fgHighlightColor);
   border-radius: 5rem;
 }
 
 .stdDisplayWrapper::-webkit-scrollbar-thumb {
-  background: var(--textClr);
+  background: var(--textColor);
   border-radius: 5rem;
 }
 
 .stdDisplayWrapper {
   width: 50%;
-  height: 50%;
-  background-color: var(--fgClr);
+  height: 60%;
+  background-color: var(--fgColor);
   border-radius: 1rem;
   overflow-y: scroll;
   overflow-x: hidden;
@@ -178,19 +178,21 @@ html {
 }
 
 .homeBtn {
+  font-size: 2rem;
   position: absolute;
   top: 2rem;
   left: 2rem;
-  background-color: var(--redClr);
-  border-radius: 5rem;
+  background-color: var(--fgColor);
+  border-radius: 1rem;
   padding: 2rem;
   cursor: pointer;
   transition: all 0.3s;
 }
 
 .homeBtn:hover {
-  background-color: var(--redHighClr);
-  scale: 1.07;
+  background-color: var(--fgHighlightColor);
+  scale: 1.04;
+  font-size: 2.08rem;
 }
 
 .addBtn {

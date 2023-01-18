@@ -23,11 +23,11 @@ export default {
 .headWrapper {
   width: 50%;
   height: 10vh;
-  color: var(--headerClr);
+  color: var(--textColor);
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--headClr);
+  background-color: var(--primColor);
   margin-top: 1.5rem;
   border-radius: 5rem;
   position: absolute;

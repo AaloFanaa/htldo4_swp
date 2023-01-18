@@ -1,12 +1,24 @@
 :root {
-  --bgClr: #101010;
-  --headClr: #50c878;
-  --textClr: #ffffff;
-  --bgHighClr: #2f2f2f;
-  --fgHighClr: #3f3f3f;
-  --fgClr: #202020;
-  --playClr: #001757;
-  --redClr: #d12020;
-  --redHighClr: #e83939;
-  --editClr: #0aad0a;
+  /* Background */
+  --bgColor: #101010;
+  --bgHighlightColor: #2f2f2f;
+
+  /* Foreground */
+  --fgColor: #202020;
+  --fgHighlightColor: #3f3f3f;
+
+  /* Primary color */
+  --primColor: #50c878;
+  --primHighlightColor: #63cc86;
+
+  /* Secondary color */
+  --secColor: #005681;
+  --secHighlightColor: #086ea0;
+
+  /* Tertiary color */
+  --tertColor: #d12020;
+  --tertHighlightColor: #e83939;
+
+  /* Misc */
+  --textColor: #ffffff;
 }
