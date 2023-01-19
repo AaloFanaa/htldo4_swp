@@ -1,23 +1,52 @@
 <template>
   <site-header :quizName="this.quizName"></site-header>
   <div class="questionDisplayWrapper">
-    <div class="questionFormWrapper" v-for="item in this.questions" :key="item">
+    <div
+      class="questionFormWrapper"
+      v-for="question in this.questions"
+      :key="question"
+    >
       <input
         type="text"
         class="questionText"
-        v-model="item[1].questionText"
+        v-model="question[1].questionText"
         placeholder="Question..."
       />
       <div
         class="questionWrapper"
-        v-for="question in item[1]"
-        :key="question.answer"
+        v-for="answer in Object.entries(question)[1][1].answers"
+        :key="answer.answerText"
       >
-        <input class="answerText" type="text" placeholder="Answer..." />
-        <input class="answerCheck" type="checkbox" />
+        <input
+          class="answerText"
+          type="text"
+          v-model="answer.answerText"
+          placeholder="Answer..."
+        />
+        <input
+          v-model="answer.answerValue"
+          class="answerCheck"
+          type="checkbox"
+        />
+      </div>
+      <div
+        @click="handleAddAnswer($event, answer.answerText)"
+        class="questionFormAddAnswer"
+      >
+        <img class="addAnswerPlus" src="../assets/plus.svg" /><span
+          class="addAnswerText"
+          >Add Answer</span
+        >
       </div>
     </div>
+    <div @click="handleAddQuestion" class="questionFormAddQuestion">
+      <img class="addQuestionPlus" src="../assets/plus.svg" /><span
+        class="addQuestionText"
+        >Add Question</span
+      >
+    </div>
   </div>
+  <div class="saveBtn">Save</div>
 </template>
 
 <script>
@@ -47,20 +76,34 @@ export default {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
         this.quizName = data.displayName;
 
         //Parsing the questions to an array
         this.questions = [];
-        for (let i = 0; i < Object.entries(data).length; i++) {
+        for (let i = 0; i < Object.entries(data.questions).length; i++) {
           this.questions[i] = Object.entries(data.questions)[i];
         }
       });
     console.log(this.questions);
   },
   methods: {
-    logQuestion(e) {
+    logger(e) {
       console.log(e);
+    },
+    handleAddAnswer(e, answer) {
+      console.log(answer, e);
+    },
+
+    handleAddQuestion() {
+      this.questions.push(this.getQuestionLayout());
+      console.log(this.questions);
+    },
+    getQuestionLayout() {
+      let layout = [];
+      let num = this.questions.length + 1;
+      layout[0] = 'question' + num;
+      layout[1] = { answers: {} };
+      return layout;
     },
   },
 };
@@ -128,6 +171,55 @@ export default {
   font-size: 2rem;
 }
 
+.questionFormAddQuestion {
+  display: flex;
+  justify-content: center;
+  transition: all 0.3s;
+}
+
+.questionFormAddQuestion:hover {
+  scale: 1.05;
+  cursor: pointer;
+}
+
+.addQuestionPlus {
+  aspect-ratio: 1;
+  height: 5rem;
+  padding: 2rem;
+}
+
+.addQuestionText {
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+.questionFormAddAnswer {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  transition: all 0.3s;
+}
+
+.questionFormAddAnswer:hover {
+  scale: 1.05;
+  cursor: pointer;
+}
+
+.addAnswerPlus {
+  aspect-ratio: 1;
+  height: 3rem;
+  padding: 1rem;
+}
+
+.addAnswerText {
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
 /* Toggle button styling */
 .answerCheck {
   height: 100%;
@@ -139,6 +231,7 @@ export default {
 
 .answerCheck::after {
   position: absolute;
+  content: 'True';
   height: 100%;
   top: 0;
   left: 0;
@@ -146,7 +239,6 @@ export default {
   border: 1px solid var(--textColor);
 }
 
-/* text input style */
 input[type='text'] {
   border: 1px solid var(--textColor);
   background-color: var(--fgtColor);
@@ -158,5 +250,20 @@ input[type='text'] {
 input[type='text']:hover {
   scale: 1.015;
   background-color: var(--fgHighlightColor);
+}
+
+.saveBtn {
+  position: absolute;
+  width: 20%;
+  bottom: 3rem;
+  padding: 2rem;
+  background-color: var(--primColor);
+  border-radius: 5rem;
+  transition: all 0.3s;
+}
+
+.saveBtn:hover {
+  background-color: var(--primHighlightColor);
+  scale: 1.05;
 }
 </style>

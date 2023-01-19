@@ -1,0 +1,28 @@
+{
+  "question1": {
+    "questionText": "Question 1",
+    "answers": {
+      "answer1": {
+        "answerText": "Answer 1",
+        "answerValue": true
+      },
+      "answer2": {
+        "answerText": "Anwer 2",
+        "answerValue": false
+      }
+    }
+  },
+  "question2": {
+    "questionText": "Question 2",
+    "answers": {
+      "answer1": {
+        "answerText": "Answer 1",
+        "answerValue": true
+      },
+      "answer2": {
+        "answerText": "Anwer 2",
+        "answerValue": false
+      }
+    }
+  }
+}

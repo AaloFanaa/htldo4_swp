@@ -85,6 +85,10 @@ export default {
     },
     handleAddQuiz() {
       let quizName = prompt('Enter the name of the quiz:');
+      console.log(quizName);
+      if (quizName == '') {
+        return;
+      }
       let id = quizName.replace(/\s+/g, '').toLowerCase();
       fetch(
         `https://quiz-app-bce68-default-rtdb.europe-west1.firebasedatabase.app/quizzes.json`,
