@@ -15,22 +15,28 @@
       <div
         class="questionWrapper"
         v-for="answer in Object.entries(question)[1][1].answers"
-        :key="answer.answerText"
+        :key="answer"
       >
         <input
           class="answerText"
           type="text"
           v-model="answer.answerText"
           placeholder="Answer..."
+          @change="this.logger(question)"
         />
         <input
           v-model="answer.answerValue"
-          class="answerCheck"
+          @change="this.logger(answer)"
+          :id="this.getUniqueId(question, answer)"
           type="checkbox"
-        />
+          class="answerCheck"
+        /><label
+          :for="this.getUniqueId(question, answer)"
+          class="answerCheckLabel"
+        ></label>
       </div>
       <div
-        @click="handleAddAnswer($event, answer.answerText)"
+        @click="this.handleAddAnswer($event, answer.answerText)"
         class="questionFormAddAnswer"
       >
         <img class="addAnswerPlus" src="../assets/plus.svg" /><span
@@ -106,6 +112,7 @@ export default {
       return layout;
     },
   },
+  getUniqueId(question, answer) {},
 };
 </script>
 
@@ -222,21 +229,35 @@ export default {
 
 /* Toggle button styling */
 .answerCheck {
-  height: 100%;
-  width: 10%;
-  align-self: center;
-  opacity: 0;
-  position: relative;
+  height: 0;
+  width: 0;
+  visibility: hidden;
 }
 
-.answerCheck::after {
-  position: absolute;
-  content: 'True';
+.answerCheckLabel {
   height: 100%;
-  top: 0;
-  left: 0;
-  background-color: transparent;
+  aspect-ratio: 1;
+  align-self: center;
+  position: relative;
+  background-color: var(--fgColor);
+  cursor: pointer;
   border: 1px solid var(--textColor);
+}
+.answerCheckLabel::after {
+  font-size: 2.2rem;
+  text-align: center;
+  content: url('../assets/wrong.svg');
+  position: absolute;
+  height: 50%;
+  width: 50%;
+  top: 100%;
+  left: 100%;
+  transform: translateX(-100%) translateY(-100%);
+  transition: all 0.3s;
+}
+
+.answerCheck:checked + .answerCheckLabel:after {
+  content: url('../assets/checkmark.svg');
 }
 
 input[type='text'] {
