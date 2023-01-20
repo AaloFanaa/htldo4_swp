@@ -34,7 +34,7 @@
         ></label>
       </div>
       <div
-        @click="this.handleAddAnswer($event, question)"
+        @click="this.handleAddAnswer(question)"
         class="questionFormAddAnswer"
       >
         <img class="addAnswerPlus" src="../assets/plus.svg" /><span
@@ -94,10 +94,17 @@ export default {
     logger(e) {
       console.log(e);
     },
-    handleAddAnswer(e, answer) {
-      console.log(answer, e);
+    handleAddAnswer(question) {
+      // console.log(question);
+      let questionId = question[0].replace(/[^0-9]/g, '');
+      let answerNum = Object.entries(question[1])[0].length + 1;
+      Object.entries(
+        Object.entries(this.questions[questionId][1])[0][1].push([
+          'answer' + answerNum,
+          this.getAnswerLayout(),
+        ])
+      );
     },
-
     handleAddQuestion() {
       this.questions.push(this.getQuestionLayout());
     },
@@ -107,6 +114,9 @@ export default {
       layout[0] = 'question' + num;
       layout[1] = { answers: {} };
       return layout;
+    },
+    getAnswerLayout() {
+      return { answerText: '', answerValue: false };
     },
     getUniqueId(question, answer) {
       return (
