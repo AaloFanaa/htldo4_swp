@@ -22,11 +22,9 @@
           type="text"
           v-model="answer.answerText"
           placeholder="Answer..."
-          @change="this.logger(question)"
         />
         <input
           v-model="answer.answerValue"
-          @change="this.logger(answer)"
           :id="this.getUniqueId(question, answer)"
           type="checkbox"
           class="answerCheck"
@@ -36,7 +34,7 @@
         ></label>
       </div>
       <div
-        @click="this.handleAddAnswer($event, answer.answerText)"
+        @click="this.handleAddAnswer($event, question)"
         class="questionFormAddAnswer"
       >
         <img class="addAnswerPlus" src="../assets/plus.svg" /><span
@@ -102,7 +100,6 @@ export default {
 
     handleAddQuestion() {
       this.questions.push(this.getQuestionLayout());
-      console.log(this.questions);
     },
     getQuestionLayout() {
       let layout = [];
@@ -111,8 +108,13 @@ export default {
       layout[1] = { answers: {} };
       return layout;
     },
+    getUniqueId(question, answer) {
+      return (
+        question[0] +
+        Object.values(answer)[0].toString().replace(/\s+/g, '').toLowerCase()
+      );
+    },
   },
-  getUniqueId(question, answer) {},
 };
 </script>
 
@@ -273,6 +275,11 @@ input[type='text']:hover {
   background-color: var(--fgHighlightColor);
 }
 
+input[type='text']:focus {
+  scale: 1.015;
+  background-color: var(--fgHighlightColor);
+}
+
 .saveBtn {
   position: absolute;
   width: 20%;
@@ -286,5 +293,6 @@ input[type='text']:hover {
 .saveBtn:hover {
   background-color: var(--primHighlightColor);
   scale: 1.05;
+  cursor: pointer;
 }
 </style>
