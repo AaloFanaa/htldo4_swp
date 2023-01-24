@@ -33,15 +33,6 @@
           class="answerCheckLabel"
         ></label>
       </div>
-      <div
-        @click="this.handleAddAnswer(question)"
-        class="questionFormAddAnswer"
-      >
-        <img class="addAnswerPlus" src="../assets/plus.svg" /><span
-          class="addAnswerText"
-          >Add Answer</span
-        >
-      </div>
     </div>
     <div @click="handleAddQuestion" class="questionFormAddQuestion">
       <img class="addQuestionPlus" src="../assets/plus.svg" /><span
@@ -50,7 +41,7 @@
       >
     </div>
   </div>
-  <div class="saveBtn">Save</div>
+  <div @click="handleSaveData" class="saveBtn">Save</div>
 </template>
 
 <script>
@@ -63,7 +54,7 @@ export default {
   props: {
     quizId: {
       type: String,
-      required: false,
+      required: true,
     },
   },
   data() {
@@ -94,29 +85,44 @@ export default {
     logger(e) {
       console.log(e);
     },
-    handleAddAnswer(question) {
-      // console.log(question);
-      let questionId = question[0].replace(/[^0-9]/g, '');
-      let answerNum = Object.entries(question[1])[0].length + 1;
-      Object.entries(
-        Object.entries(this.questions[questionId][1])[0][1].push([
-          'answer' + answerNum,
-          this.getAnswerLayout(),
-        ])
-      );
+    handleSaveData() {
+      console.log(this.questions);
+      fetch(
+        `https://quiz-app-bce68-default-rtdb.europe-west1.firebasedatabase.app/quizzes/${this.quizId}/questions.json`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(this.questions),
+        }
+      ).then((res) => {
+        console.log(res);
+      });
     },
     handleAddQuestion() {
-      this.questions.push(this.getQuestionLayout());
+      let ansNum = prompt('How many answers should the question have?');
+      if (isNaN(ansNum)) {
+        alert('Enter a number!');
+        return;
+      }
+      this.questions.push(this.getQuestionLayout(ansNum));
     },
-    getQuestionLayout() {
+    getQuestionLayout(ansNum) {
       let layout = [];
       let num = this.questions.length + 1;
+      let answers = {};
+      for (let i = 0; i < ansNum; i++) {
+        let index = i + 1;
+        answers['answer' + index] = {
+          answerText: '',
+          answerValue: false,
+        };
+      }
       layout[0] = 'question' + num;
-      layout[1] = { answers: {} };
+      layout[1] = { answers: answers };
+      console.log(layout);
       return layout;
-    },
-    getAnswerLayout() {
-      return { answerText: '', answerValue: false };
     },
     getUniqueId(question, answer) {
       return (
@@ -258,18 +264,15 @@ export default {
 .answerCheckLabel::after {
   font-size: 2.2rem;
   text-align: center;
-  content: url('../assets/wrong.svg');
+  content: 'False';
   position: absolute;
-  height: 50%;
-  width: 50%;
-  top: 100%;
-  left: 100%;
-  transform: translateX(-100%) translateY(-100%);
+  height: 100%;
+  width: 100%;
   transition: all 0.3s;
 }
 
 .answerCheck:checked + .answerCheckLabel:after {
-  content: url('../assets/checkmark.svg');
+  content: 'True';
 }
 
 input[type='text'] {
