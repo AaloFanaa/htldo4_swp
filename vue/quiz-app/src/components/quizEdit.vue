@@ -48,6 +48,7 @@
 import siteHeader from './siteHeader.vue';
 
 export default {
+  emits: ['setPageState'],
   components: {
     siteHeader,
   },
@@ -82,23 +83,26 @@ export default {
     console.log(this.questions);
   },
   methods: {
-    logger(e) {
-      console.log(e);
-    },
     handleSaveData() {
-      console.log(this.questions);
+      //formatting data to upload it
+      let data = {};
+      this.questions.forEach((question) => {
+        data[question[0]] = question[1];
+      });
       fetch(
-        `https://quiz-app-bce68-default-rtdb.europe-west1.firebasedatabase.app/quizzes/${this.quizId}/questions.json`,
+        `https://quiz-app-bce68-default-rtdb.europe-west1.firebasedatabase.app/quizzes/${this.quizId}.json`,
         {
-          method: 'POST',
+          method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(this.questions),
+          body: JSON.stringify({ questions: data }),
         }
       ).then((res) => {
         console.log(res);
       });
+      //reset page state
+      this.$emit('setPageState');
     },
     handleAddQuestion() {
       let ansNum = prompt('How many answers should the question have?');
@@ -121,7 +125,6 @@ export default {
       }
       layout[0] = 'question' + num;
       layout[1] = { answers: answers };
-      console.log(layout);
       return layout;
     },
     getUniqueId(question, answer) {
@@ -266,6 +269,7 @@ export default {
   text-align: center;
   content: 'False';
   position: absolute;
+  top: clac(50% - 1.1rem);
   height: 100%;
   width: 100%;
   transition: all 0.3s;

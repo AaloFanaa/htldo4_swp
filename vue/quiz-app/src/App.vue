@@ -20,7 +20,12 @@
   <quiz-edit
     v-if="this.pageState.value === 'edit'"
     :quizId="this.selectedQuiz"
+    @setPageState="setToStdPage"
   ></quiz-edit>
+  <quiz-game
+    v-if="this.pageState.value === 'play'"
+    :quizId="this.selectedQuiz"
+  ></quiz-game>
 </template>
 
 <script>
@@ -75,8 +80,8 @@ export default {
             ).then((res) => {
               console.log(res);
             });
-            this.fetchQuizzes();
           }
+          this.fetchQuizzes();
           break;
       }
     },
