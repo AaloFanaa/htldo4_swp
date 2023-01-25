@@ -265,18 +265,28 @@ export default {
   border: 1px solid var(--textColor);
 }
 .answerCheckLabel::after {
+  display: inline-block;
   font-size: 2.2rem;
-  text-align: center;
-  content: 'False';
+  content: '\274c';
   position: absolute;
-  top: clac(50% - 1.1rem);
+  transform: rotate;
+  left: 0;
+  top: 50%;
   height: 100%;
   width: 100%;
   transition: all 0.3s;
+  scale: 2;
 }
 
 .answerCheck:checked + .answerCheckLabel:after {
-  content: 'True';
+  scale: 2;
+  content: '\2705';
+}
+
+.answerCheck:checked:hover + .answerCheckLabel:after {
+}
+
+.answerCheck:hover + answerCheckLabel:after {
 }
 
 input[type='text'] {
