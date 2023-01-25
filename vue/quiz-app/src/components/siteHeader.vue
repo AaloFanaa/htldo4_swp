@@ -1,6 +1,6 @@
 <template>
   <div class="headWrapper">
-    <span>Editing quiz: {{ this.quizName }}</span>
+    <span>{{ this.greetingClause + this.quizName }}</span>
   </div>
 </template>
 
@@ -11,11 +11,11 @@ export default {
       type: String,
       default: 'Quiz!',
     },
+    greetingClause: {
+      type: String,
+      default: 'Quiz: ',
+    },
   },
-  data() {
-    return {};
-  },
-  methods: {},
 };
 </script>
 

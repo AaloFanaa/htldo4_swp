@@ -17,20 +17,18 @@
     ></quiz-display>
     <img @click="handleAddQuiz" class="addBtn" src="./assets/plus.svg" />
   </div>
+  <quiz-game
+    v-if="this.pageState.value === 'play'"
+    :quizId="this.selectedQuiz"
+  ></quiz-game>
   <quiz-edit
     v-if="this.pageState.value === 'edit'"
     :quizId="this.selectedQuiz"
     @setPageState="setToStdPage"
   ></quiz-edit>
-  <quiz-game
-    v-if="this.pageState.value === 'play'"
-    :quizId="this.selectedQuiz"
-  ></quiz-game>
 </template>
 
 <script>
-/* eslint-disable */
-import siteHeader from './components/siteHeader.vue';
 import quizDisplay from './components/quizDisplay.vue';
 import quizEdit from './components/quizEdit.vue';
 import quizGame from './components/quizGame.vue';
@@ -38,7 +36,6 @@ import quizGame from './components/quizGame.vue';
 export default {
   name: 'App',
   components: {
-    siteHeader,
     quizDisplay,
     quizEdit,
     quizGame,
@@ -58,14 +55,14 @@ export default {
     handlePageChange(btnType, quizId) {
       switch (btnType) {
         case 'play':
-          this.pageState = { vlaue: 'play', displayValue: 'Good luck!' };
+          this.pageState = { value: 'play', displayValue: 'Good luck!' };
           this.selectedQuiz = quizId;
-          console.log('Changing page...');
+          console.log('Changing page to: ', this.pageState);
           break;
         case 'edit':
           this.pageState = { value: 'edit', displayValue: 'Edit quiz!' };
           this.selectedQuiz = quizId;
-          console.log('Changing page...');
+          console.log('Changing page to: ', this.pageState);
           break;
         case 'del':
           if (confirm('Are you sure you want to delete this Quiz')) {
@@ -90,7 +87,6 @@ export default {
     },
     handleAddQuiz() {
       let quizName = prompt('Enter the name of the quiz:');
-      console.log(quizName);
       if (quizName == '') {
         return;
       }
@@ -114,7 +110,6 @@ export default {
       this.fetchQuizzes();
     },
     async fetchQuizzes() {
-      console.log('Wait...');
       await fetch(
         'https://quiz-app-bce68-default-rtdb.europe-west1.firebasedatabase.app/quizzes.json'
       )

@@ -1,5 +1,8 @@
 <template>
-  <site-header :quizName="this.quizName"></site-header>
+  <site-header
+    :greetingClause="'Editing Quiz: '"
+    :quizName="this.quizName"
+  ></site-header>
   <div class="questionDisplayWrapper">
     <div
       class="questionFormWrapper"
@@ -80,7 +83,6 @@ export default {
           this.questions[i] = Object.entries(data.questions)[i];
         }
       });
-    console.log(this.questions);
   },
   methods: {
     handleSaveData() {
@@ -281,12 +283,6 @@ export default {
 .answerCheck:checked + .answerCheckLabel:after {
   scale: 2;
   content: '\2705';
-}
-
-.answerCheck:checked:hover + .answerCheckLabel:after {
-}
-
-.answerCheck:hover + answerCheckLabel:after {
 }
 
 input[type='text'] {
