@@ -79,9 +79,9 @@ export default {
               }
             ).then((res) => {
               console.log(res);
+              this.fetchQuizzes();
             });
           }
-          this.fetchQuizzes();
           break;
       }
     },
@@ -109,10 +109,12 @@ export default {
         }
       ).then((res) => {
         console.log(res);
+        this.fetchQuizzes();
       });
       this.fetchQuizzes();
     },
     async fetchQuizzes() {
+      console.log('Wait...');
       await fetch(
         'https://quiz-app-bce68-default-rtdb.europe-west1.firebasedatabase.app/quizzes.json'
       )
