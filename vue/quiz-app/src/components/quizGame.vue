@@ -1,14 +1,26 @@
 <template>
-  <site-header :greetingClause="'Playing: '"></site-header>
-  <div class="playWrapper">{{ this.quizId }}</div>
+  <div v-if="this.quizFinished === false" class="playWrapper">
+    <question-display
+      :currQuestion="this.questions[this.currQuestion]"
+      @handleAnswerClicked="handleAnswer"
+    ></question-display>
+  </div>
+  <div v-if="this.quizFinished === true" class="finishedWrapper">
+    <span
+      >You got {{ this.rightAnswers }} of {{ this.questions.length }} answers
+      right</span
+    >
+  </div>
 </template>
 
 <script>
-import siteHeader from './siteHeader.vue';
+// import siteHeader from './siteHeader.vue';
+import questionDisplay from './questionDisplay.vue';
 
 export default {
   components: {
-    siteHeader,
+    // siteHeader,
+    questionDisplay,
   },
   props: {
     quizId: {
@@ -20,7 +32,26 @@ export default {
     return {
       questions: [],
       quizName: '',
+      currQuestion: 0,
+      rightAnswers: 0,
+      quizFinished: false,
     };
+  },
+  methods: {
+    handleAnswer(answerValue) {
+      console.log(this.currQuestion + 1, this.questions.length);
+      this.currQuestion + 1 == this.questions.length
+        ? (this.quizFinished = true)
+        : (this.quizFinished = false);
+      this.currQuestion++;
+      if (!answerValue) {
+        return;
+      }
+      this.rightAnswers++;
+    },
+    fnishedQuiz() {
+      this.quizFinished != this.quizFinished;
+    },
   },
   async created() {
     await fetch(
@@ -31,8 +62,6 @@ export default {
       })
       .then((data) => {
         this.quizName = data.displayName;
-
-        //Parsing the questions to an array
         this.questions = [];
         for (let i = 0; i < Object.entries(data.questions).length; i++) {
           this.questions[i] = Object.entries(data.questions)[i];
@@ -62,10 +91,20 @@ export default {
   height: 60%;
   background-color: var(--fgColor);
   border-radius: 1rem;
-  overflow-y: scroll;
-  overflow-x: hidden;
   display: flex;
   flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.finishedWrapper {
+  width: 50%;
+  height: 60%;
+  background-color: var(--primColor);
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
   align-items: center;
 }
 </style>

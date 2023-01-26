@@ -17,15 +17,15 @@
     ></quiz-display>
     <img @click="handleAddQuiz" class="addBtn" src="./assets/plus.svg" />
   </div>
-  <quiz-game
-    v-if="this.pageState.value === 'play'"
-    :quizId="this.selectedQuiz"
-  ></quiz-game>
   <quiz-edit
     v-if="this.pageState.value === 'edit'"
     :quizId="this.selectedQuiz"
     @setPageState="setToStdPage"
   ></quiz-edit>
+  <quiz-game
+    v-if="this.pageState.value === 'play'"
+    :quizId="this.selectedQuiz"
+  ></quiz-game>
 </template>
 
 <script>
