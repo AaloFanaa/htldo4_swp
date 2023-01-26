@@ -14,12 +14,10 @@
 </template>
 
 <script>
-// import siteHeader from './siteHeader.vue';
 import questionDisplay from './questionDisplay.vue';
 
 export default {
   components: {
-    // siteHeader,
     questionDisplay,
   },
   props: {

@@ -107,10 +107,14 @@ export default {
       this.$emit('setPageState');
     },
     handleAddQuestion() {
-      let ansNum = prompt('How many answers should the question have?');
+      let ansNum = prompt(
+        'How many answers should the question have? (At least 2)'
+      );
       if (isNaN(ansNum)) {
         alert('Enter a number!');
         return;
+      } else if (ansNum < 2) {
+        ansNum = 2;
       }
       this.questions.push(this.getQuestionLayout(ansNum));
     },
