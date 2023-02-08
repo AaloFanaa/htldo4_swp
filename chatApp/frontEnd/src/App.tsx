@@ -1,13 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
+import SiteHeader from './components/SiteHeader';
+import DisplayUsers from './components/DisplayUsers';
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <div className='app'>
-      <div className='header'>Header</div>
-      <div className='users'>Online Users</div>
+      <SiteHeader></SiteHeader>
+      <DisplayUsers></DisplayUsers>
       <div className='chat'>Chat display</div>
     </div>
   );
