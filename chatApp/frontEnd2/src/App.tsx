@@ -41,7 +41,8 @@ function App() {
       } else {
         console.log('No user signed in');
       }
-    })
+    }),
+    []
   );
 
   return (
