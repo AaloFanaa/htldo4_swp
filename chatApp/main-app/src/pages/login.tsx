@@ -7,12 +7,7 @@ export default function Home() {
   return (
     <>
       <span>On Login Page</span>
-      <span
-        onClick={() => {
-          router.push('/');
-        }}>
-        Go back
-      </span>
+      <button onClick={() => {}}>Login</button>
     </>
   );
 }
