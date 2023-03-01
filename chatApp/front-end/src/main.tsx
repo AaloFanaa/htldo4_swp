@@ -36,9 +36,7 @@ const router = createBrowserRouter([
   },
 ]);
 
-function getUser() {
-  console.log('Login');
-}
+function getUser() {}
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
