@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import '../styles/Header.module.css';
+import '../../styles/Header.module.css';
 
 function Header() {
   return (

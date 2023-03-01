@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import '../styles/UserList.module.css';
+import '../../styles/UserList.module.css';
 
 function UserList() {
   return (
