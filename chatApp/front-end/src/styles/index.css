@@ -4,8 +4,17 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
-
   font-size: 10px;
+
+  /* Color definitions */
+
+  /* Background colors */
+  --bgColor: rgb(5, 6, 45);
+  --bgHlColor: rgb(15, 16, 98);
+
+  /* Text colors */
+  --textColor: rgba(255, 255, 255, 1);
+  --textHlColor: rgba(255, 255, 255, 0.7);
 }
 
 html,
@@ -13,4 +22,5 @@ body {
   font-family: Verdana, Geneva, Tahoma, sans-serif, sans-serif;
   margin: 0;
   text-align: center;
+  background-color: rgb(5, 6, 45);
 }
