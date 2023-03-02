@@ -1,39 +1,48 @@
 import { useEffect, useState } from 'react';
 import styles from '../styles/Login.module.css';
+import LoginButton from './components/LoginButton';
 import {
-  getAuth,
-  signInWithPopup,
   GoogleAuthProvider,
   GithubAuthProvider,
-  User,
-  UserCredential,
+  signInWithPopup,
   Auth,
+  getAuth,
+  onAuthStateChanged,
 } from 'firebase/auth';
-import LoginButton from './components/LoginButton';
+import { useNavigate } from 'react-router-dom';
 
 interface loginButtonObject {
+  id: React.Key;
   label: string;
   provider: any;
   loginFunction: Function;
 }
 
 function Login() {
-  const handleLogin = (prov: any) => {
-    // signInWithPopup(prov);
+  const navigate = useNavigate();
+
+  const handleLogin = async (prov: any) => {
+    await signInWithPopup(auth, prov);
+    localStorage.setItem('auth', JSON.stringify(auth));
+    navigate('/');
   };
+
+  //Firebase authentification
+  const provider: GoogleAuthProvider = new GoogleAuthProvider();
+  const auth: Auth = getAuth();
 
   const GoogleProvider = new GoogleAuthProvider();
   const GithubProvider = new GithubAuthProvider();
 
-  useEffect(() => {}, []);
-
   const loginButtons: Array<loginButtonObject> = [
     {
+      id: 1,
       label: 'Login in with Google!',
       provider: GoogleProvider,
       loginFunction: handleLogin,
     },
     {
+      id: 2,
       label: 'Login in with Github!',
       provider: GithubProvider,
       loginFunction: handleLogin,
@@ -45,11 +54,11 @@ function Login() {
       {loginButtons.map((loginButton: loginButtonObject) => {
         return (
           <LoginButton
+            key={loginButton.id}
             buttonLabel={loginButton.label}
             loginProvider={loginButton.provider}
-            loginEvent={(prov: any) =>
-              loginButton.loginFunction(prov)
-            }></LoginButton>
+            loginEvent={(prov: any) => loginButton.loginFunction(prov)}
+          ></LoginButton>
         );
       })}
     </div>

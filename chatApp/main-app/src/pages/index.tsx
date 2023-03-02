@@ -45,7 +45,8 @@ export default function Home() {
       <span
         onClick={() => {
           router.push('/login');
-        }}>
+        }}
+      >
         Change Page
       </span>
     </>
