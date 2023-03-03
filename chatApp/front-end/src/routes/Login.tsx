@@ -23,7 +23,6 @@ function Login() {
 
   const handleLogin = async (prov: any) => {
     await signInWithPopup(auth, prov);
-    localStorage.setItem('auth', JSON.stringify(auth));
     navigate('/');
   };
 
@@ -57,8 +56,9 @@ function Login() {
             key={loginButton.id}
             buttonLabel={loginButton.label}
             loginProvider={loginButton.provider}
-            loginEvent={(prov: any) => loginButton.loginFunction(prov)}
-          ></LoginButton>
+            loginEvent={(prov: any) =>
+              loginButton.loginFunction(prov)
+            }></LoginButton>
         );
       })}
     </div>

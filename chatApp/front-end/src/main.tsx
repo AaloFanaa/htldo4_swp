@@ -1,4 +1,3 @@
-import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './routes/App';
 import Login from './routes/Login';
@@ -8,10 +7,8 @@ import {
   redirect,
   RouterProvider,
 } from 'react-router-dom';
-import { Provider } from 'react-redux';
 import { FirebaseApp, initializeApp } from 'firebase/app';
 import { Auth, getAuth, User } from 'firebase/auth';
-import { get } from 'immer/dist/internal';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyA26AsQ9Kf5KMfhqweAh5Egj-RzUvqhYak',
@@ -27,7 +24,7 @@ const firebase: FirebaseApp = initializeApp(firebaseConfig);
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <App />,
+    element: <App getAuth={getAuth()} />,
     loader: async () => {
       const auth: Auth | null = await getAuth();
       const user = await auth.currentUser;

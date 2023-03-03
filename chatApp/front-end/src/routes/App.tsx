@@ -8,18 +8,15 @@ import { useNavigate } from 'react-router-dom';
 
 const App = (props: any) => {
   const navigate = useNavigate();
+
   let auth: Auth | null = null;
 
+  // const [auth, setAuth] = useState<Auth | null>();
   const [user, setUser] = useState<User | null>();
 
   useEffect(() => {
-    const fetchUser = async () => {
-      auth = await getAuth();
-      await setUser(auth.currentUser);
-      if (!user) {
-        navigate('/login');
-      }
-    };
+    auth = props.getAuth;
+    console.log(auth);
   }, []);
 
   return (
@@ -27,7 +24,7 @@ const App = (props: any) => {
       <Chat></Chat>
       <Header></Header>
       <UserList></UserList>
-      <span>{user}</span>
+      <button onClick={auth?.signOut()}>Log out</button>
     </div>
   );
 };
