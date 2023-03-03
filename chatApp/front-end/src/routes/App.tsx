@@ -4,28 +4,40 @@ import UserList from './components/UserList';
 import Header from './components/Header';
 import { Auth, getAuth, User } from 'firebase/auth';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
+import { useAuth } from '../login/useAuth';
+import { auth } from '../login/firebase';
 
 const App = (props: any) => {
   const navigate = useNavigate();
+  const { isLoggedIn } = useAuth();
 
-  let auth: Auth | null = null;
-
-  // const [auth, setAuth] = useState<Auth | null>();
-  const [user, setUser] = useState<User | null>();
+  let userAuth: Auth | null = auth;
 
   useEffect(() => {
-    auth = props.getAuth;
-    console.log(auth);
+    console.log(userAuth);
   }, []);
 
   return (
-    <div className='App'>
-      <Chat></Chat>
-      <Header></Header>
-      <UserList></UserList>
-      <button onClick={auth?.signOut()}>Log out</button>
-    </div>
+    <>
+      {isLoggedIn ? (
+        <div className={styles.App}>
+          <Header></Header>
+          <UserList></UserList>
+          <Chat></Chat>
+          <button
+            onClick={() => {
+              userAuth?.signOut();
+              console.log(auth);
+            }}
+          >
+            Logout
+          </button>
+        </div>
+      ) : (
+        <Navigate to='/login' />
+      )}
+    </>
   );
 };
 

@@ -24,16 +24,7 @@ const firebase: FirebaseApp = initializeApp(firebaseConfig);
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <App getAuth={getAuth()} />,
-    loader: async () => {
-      const auth: Auth | null = await getAuth();
-      const user = await auth.currentUser;
-      console.log(user);
-      if (!user) {
-        return redirect('/login');
-      }
-      return null;
-    },
+    element: <App />,
   },
   {
     path: '/login',

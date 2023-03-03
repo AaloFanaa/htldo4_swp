@@ -5,11 +5,10 @@ import {
   GoogleAuthProvider,
   GithubAuthProvider,
   signInWithPopup,
-  Auth,
-  getAuth,
-  onAuthStateChanged,
 } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
+import { auth } from '../login/firebase';
+import { useAuth } from '../login/useAuth';
 
 interface loginButtonObject {
   id: React.Key;
@@ -20,15 +19,14 @@ interface loginButtonObject {
 
 function Login() {
   const navigate = useNavigate();
+  const { isLoggedIn } = useAuth();
 
   const handleLogin = async (prov: any) => {
     await signInWithPopup(auth, prov);
     navigate('/');
   };
 
-  //Firebase authentification
   const provider: GoogleAuthProvider = new GoogleAuthProvider();
-  const auth: Auth = getAuth();
 
   const GoogleProvider = new GoogleAuthProvider();
   const GithubProvider = new GithubAuthProvider();
@@ -56,9 +54,8 @@ function Login() {
             key={loginButton.id}
             buttonLabel={loginButton.label}
             loginProvider={loginButton.provider}
-            loginEvent={(prov: any) =>
-              loginButton.loginFunction(prov)
-            }></LoginButton>
+            loginEvent={(prov: any) => loginButton.loginFunction(prov)}
+          ></LoginButton>
         );
       })}
     </div>
