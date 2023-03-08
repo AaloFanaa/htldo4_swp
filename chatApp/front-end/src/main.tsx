@@ -7,28 +7,30 @@ import {
   redirect,
   RouterProvider,
 } from 'react-router-dom';
-import { FirebaseApp, initializeApp } from 'firebase/app';
-import { Auth, getAuth, User } from 'firebase/auth';
-
-const firebaseConfig = {
-  apiKey: 'AIzaSyA26AsQ9Kf5KMfhqweAh5Egj-RzUvqhYak',
-  authDomain: 'webrtc-chat-app-76567.firebaseapp.com',
-  projectId: 'webrtc-chat-app-76567',
-  storageBucket: 'webrtc-chat-app-76567.appspot.com',
-  messagingSenderId: '1090800716251',
-  appId: '1:1090800716251:web:4323f0fe383b62b5943ffe',
-};
-
-const firebase: FirebaseApp = initializeApp(firebaseConfig);
+import { getAuth } from 'firebase/auth';
+import { auth } from './login/firebase';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <App />,
+    loader: () => {
+      console.log(auth);
+
+      if (auth === null) {
+        return redirect('/login');
+      }
+      return null;
+    },
   },
   {
     path: '/login',
     element: <Login />,
+    loader: () => {
+      auth.signOut();
+      console.log(auth);
+      return null;
+    },
   },
 ]);
 

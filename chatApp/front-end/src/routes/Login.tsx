@@ -19,7 +19,7 @@ interface loginButtonObject {
 
 function Login() {
   const navigate = useNavigate();
-  const { isLoggedIn } = useAuth();
+  const authHook = useAuth();
 
   const handleLogin = async (prov: any) => {
     await signInWithPopup(auth, prov);
@@ -54,8 +54,9 @@ function Login() {
             key={loginButton.id}
             buttonLabel={loginButton.label}
             loginProvider={loginButton.provider}
-            loginEvent={(prov: any) => loginButton.loginFunction(prov)}
-          ></LoginButton>
+            loginEvent={(prov: any) =>
+              loginButton.loginFunction(prov)
+            }></LoginButton>
         );
       })}
     </div>

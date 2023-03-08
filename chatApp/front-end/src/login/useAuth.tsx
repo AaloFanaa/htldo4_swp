@@ -8,7 +8,7 @@ export const useAuth = () => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    const subscriber = onAuthStateChanged(auth, (userInfo) => {
+    const subscriber = onAuthStateChanged(auth, userInfo => {
       if (userInfo) {
         setIsLoggedIn(true);
         setUser(userInfo);
