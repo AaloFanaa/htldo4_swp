@@ -48,17 +48,20 @@ function Login() {
 
   return (
     <div className={styles.Login}>
-      {loginButtons.map((loginButton: loginButtonObject) => {
-        return (
-          <LoginButton
-            key={loginButton.id}
-            buttonLabel={loginButton.label}
-            loginProvider={loginButton.provider}
-            loginEvent={(prov: any) =>
-              loginButton.loginFunction(prov)
-            }></LoginButton>
-        );
-      })}
+      <div className={styles.loginCard}>
+        <span className={styles.loginText}>Login to chat</span>
+        {loginButtons.map((loginButton: loginButtonObject) => {
+          return (
+            <LoginButton
+              key={loginButton.id}
+              buttonLabel={loginButton.label}
+              loginProvider={loginButton.provider}
+              loginEvent={(prov: any) =>
+                loginButton.loginFunction(prov)
+              }></LoginButton>
+          );
+        })}
+      </div>
     </div>
   );
 }

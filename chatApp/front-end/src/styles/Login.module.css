@@ -6,3 +6,13 @@
   align-items: center;
   font-size: 5rem;
 }
+
+.loginCard {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bgHlColor);
+}
+
+.loginText {
+  font-size: 3rem;
+}
