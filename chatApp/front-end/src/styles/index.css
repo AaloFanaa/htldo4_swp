@@ -6,11 +6,13 @@
   -webkit-text-size-adjust: 100%;
   font-size: 10px;
 
-  /* Color definitions */
-
   /* Background colors */
   --bgColor: #181818;
   --bgHlColor: #323232;
+
+  /* Foreground color */
+  --fgColor: #323232;
+  --fgHlColor: #464646;
 
   /* Primary colors */
   --primColor: #d62323;
@@ -36,4 +38,11 @@ body {
   text-align: center;
   background-color: var(--bgColor);
   color: var(--textColor);
+  height: 100vh;
+  overflow: hidden;
+}
+
+#root {
+  height: 100vh;
+  overflow: hidden;
 }

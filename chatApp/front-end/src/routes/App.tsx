@@ -26,13 +26,6 @@ const App = (props: any) => {
         <Header></Header>
         <UserList></UserList>
         <Chat></Chat>
-        <button
-          onClick={() => {
-            auth.signOut();
-            navigate('/login');
-          }}>
-          Logout
-        </button>
       </div>
     </>
   );

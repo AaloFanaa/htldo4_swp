@@ -1,0 +1,35 @@
+.Header {
+  grid-area: 1 / 1 / 2 / 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: var(--fgColor);
+}
+
+.userDisplay {
+  display: flex;
+  width: auto;
+  padding: 2rem;
+  border-radius: 1rem;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.userDisplay:hover {
+  background-color: var(--fgHlColor);
+}
+
+.userImg {
+  aspect-ratio: 1;
+  border-radius: 50%;
+  height: 4rem;
+}
+
+.userName {
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  padding-left: 1rem;
+}

@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import '../../styles/UserList.module.css';
+import styles from '../../styles/UserList.module.css';
 
 function UserList() {
   return (
-    <div className='UserList'>
+    <div className={styles.UserList}>
       <span>User List</span>
     </div>
   );

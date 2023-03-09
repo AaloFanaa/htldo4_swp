@@ -33,7 +33,7 @@
   height: calc(100% + 1px);
   border-left: 1px solid var(--textColor);
   border-right: 1px solid var(--textColor);
-  transition: all 0.3s cubic-bezier(0.41, 0.1, 0.61, 2);
+  transition: all 0.3s cubic-bezier(0.41, 0.1, 0.61, 2.5);
 }
 
 .loginButton:active::after,

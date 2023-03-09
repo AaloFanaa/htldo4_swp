@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import '../../styles/Chat.module.css';
+import styles from '../../styles/Chat.module.css';
 
 function Chat() {
   return (
-    <div className='Chat'>
+    <div className={styles.Chat}>
       <span>Chat</span>
     </div>
   );
