@@ -7,20 +7,20 @@
   font-size: 10px;
 
   /* Background colors */
-  --bgColor: #181818;
-  --bgHlColor: #323232;
+  --bgColor: #2c2c2c;
+  --bgHlColor: #414141;
 
   /* Foreground color */
-  --fgColor: #323232;
-  --fgHlColor: #464646;
+  --fgColor: #919191;
+  --fgHlColor: #f1f0f0;
 
   /* Primary colors */
   --primColor: #d62323;
   --primHlColor: #ba0000;
 
   /* Secondary color */
-  --secColor: #e4e4e4;
-  --secHlColor: #cecece;
+  --secColor: #720e81;
+  --secHlColor: #7d208b;
 
   /* Tertiary color */
   --tertColor: #0a0acc;

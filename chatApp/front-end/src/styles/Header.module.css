@@ -5,7 +5,8 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  background-color: var(--fgColor);
+  border-right: 1px solid var(--bgHlColor);
+  position: relative;
 }
 
 .userDisplay {
@@ -18,13 +19,13 @@
 }
 
 .userDisplay:hover {
-  background-color: var(--fgHlColor);
+  background-color: var(--bgHlColor);
 }
 
 .userImg {
   aspect-ratio: 1;
   border-radius: 50%;
-  height: 4rem;
+  height: 4.5rem;
 }
 
 .userName {
@@ -32,4 +33,18 @@
   display: flex;
   align-items: center;
   padding-left: 1rem;
+}
+
+.logoutButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 1rem;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.logoutButton:hover {
+  background-color: var(--bgHlColor);
 }

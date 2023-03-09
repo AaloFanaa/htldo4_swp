@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import styles from '../../styles/LoginButton.module.css';
 
 interface props {
@@ -11,8 +12,9 @@ function LoginButton(props: props) {
     <>
       <button
         className={styles.loginButton}
-        onClick={() => props.loginEvent(props.loginProvider)}>
-        <span className={styles.loginText}>{props.buttonLabel}</span>
+        onClick={() => props.loginEvent(props.loginProvider)}
+      >
+        {props.buttonLabel}
       </button>
     </>
   );

@@ -34,13 +34,13 @@ function Login() {
   const loginButtons: Array<loginButtonObject> = [
     {
       id: 1,
-      label: 'Login in with Google!',
+      label: 'Login in with Google',
       provider: GoogleProvider,
       loginFunction: handleLogin,
     },
     {
       id: 2,
-      label: 'Login in with Github!',
+      label: 'Login in with Github',
       provider: GithubProvider,
       loginFunction: handleLogin,
     },
@@ -49,18 +49,20 @@ function Login() {
   return (
     <div className={styles.Login}>
       <div className={styles.loginCard}>
-        <span className={styles.loginText}>Login to chat!</span>
+        <span className={styles.loginText}>
+          Have a <span className={styles.loginHlText}>Safe Chat</span>
+        </span>
         {loginButtons.map((loginButton: loginButtonObject) => {
           return (
             <LoginButton
               key={loginButton.id}
               buttonLabel={loginButton.label}
               loginProvider={loginButton.provider}
-              loginEvent={(prov: any) =>
-                loginButton.loginFunction(prov)
-              }></LoginButton>
+              loginEvent={(prov: any) => loginButton.loginFunction(prov)}
+            ></LoginButton>
           );
         })}
+        <span className={styles.moreText}>Working on more options...</span>
       </div>
     </div>
   );

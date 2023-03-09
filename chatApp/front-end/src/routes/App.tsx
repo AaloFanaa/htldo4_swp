@@ -9,7 +9,6 @@ import { useAuth } from '../login/useAuth';
 import { auth } from '../login/firebase';
 
 const App = (props: any) => {
-  const navigate = useNavigate();
   const { isLoggedIn, user } = useAuth();
 
   let userAuth: Auth | null = auth;

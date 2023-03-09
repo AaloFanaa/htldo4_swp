@@ -7,7 +7,6 @@ import {
   redirect,
   RouterProvider,
 } from 'react-router-dom';
-import { getAuth } from 'firebase/auth';
 import { auth } from './login/firebase';
 
 const router = createBrowserRouter([
@@ -16,7 +15,6 @@ const router = createBrowserRouter([
     element: <App />,
     loader: () => {
       console.log(auth);
-
       if (auth === null) {
         return redirect('/login');
       }

@@ -5,12 +5,18 @@
   justify-content: space-evenly;
   align-items: center;
   font-size: 5rem;
+  background: linear-gradient(
+    135deg,
+    var(--primColor) 28%,
+    #720e81 50%,
+    var(--tertColor) 72%
+  );
 }
 
 .loginCard {
   display: flex;
   flex-direction: column;
-  background-color: var(--bgHlColor);
+  background-color: var(--bgColor);
   width: 30%;
   height: 70%;
   padding: 2rem;
@@ -19,6 +25,23 @@
 }
 
 .loginText {
-  font-size: 3rem;
+  font-size: 3.4rem;
   margin-bottom: 3rem;
+  cursor: default;
+}
+
+.loginHlText {
+  animation: glow 2500ms linear infinite 1000ms;
+  text-transform: uppercase;
+}
+
+.moreText {
+  margin-top: 2.5rem;
+  font-size: 2rem;
+}
+
+@keyframes glow {
+  40% {
+    text-shadow: 0 0 8px #fff;
+  }
 }

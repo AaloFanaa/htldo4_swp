@@ -1,3 +1,45 @@
 .UserList {
   grid-area: 2 / 1 / 3 / 2;
+  border-top: 1px solid var(--bgHlColor);
+  border-right: 1px solid var(--bgHlColor);
+}
+
+.listHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 3rem;
+  padding: 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.listHeadText {
+  cursor: default;
+}
+
+.icon {
+  aspect-ratio: 1;
+  height: 4rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2.5%;
+  border-radius: 1rem;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.icon:hover {
+  background-color: var(--bgHlColor);
+}
+
+.listHead::after {
+  position: absolute;
+  content: '';
+  left: 2.5%;
+  width: 95%;
+  height: 100%;
+  border-bottom: 1px solid var(--bgHlColor);
+  z-index: -1;
 }

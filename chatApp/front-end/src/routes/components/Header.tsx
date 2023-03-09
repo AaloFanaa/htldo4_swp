@@ -1,22 +1,68 @@
 import styles from '../../styles/Header.module.css';
 import { useAuth } from '../../login/useAuth';
+import { auth } from '../../login/firebase';
 import logoutSvg from '../../assets/logout.svg';
 import placeholderImage from '../../assets/placeholder_image.jpg';
+import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import ModalDialog from './ModalDialog';
 
 function Header() {
   const { user } = useAuth();
+  const navigate = useNavigate();
+  const userPic: any = user?.photoURL as any; //Typescript does not like me :(
+  const maxNameLength: number = 14;
+  let [userName, setUserName] = useState<string>('');
+  let [showUserInfo, setShowUserInfo] = useState<boolean>(false);
+
+  useEffect(() => {
+    let length: number = user?.displayName!.length!;
+    if (length! < maxNameLength) {
+      setUserName(user?.displayName!);
+      return;
+    }
+    setUserName(user?.displayName?.slice(0, maxNameLength - 3) + '...');
+  });
+
+  const handleModalDialogHide = () => {
+    console.log('Hall');
+    setShowUserInfo(false);
+  };
 
   return (
     <div className={styles.Header}>
-      <div className={styles.userDisplay}>
+      <div
+        className={styles.userDisplay}
+        onClick={() => {
+          setShowUserInfo(true);
+        }}
+      >
         <img
           className={styles.userImg}
-          src={user ? user?.photoURL : placeholderImage}></img>
+          alt='User picture'
+          src={user ? userPic : placeholderImage}
+        ></img>
         <span className={styles.userName}>
-          {user ? user.displayName : 'Loading...'}
+          {userName !== '' ? userName : 'Loading...'}
         </span>
       </div>
-      <img src={logoutSvg}></img>
+      <div
+        className={styles.logoutButton}
+        onClick={() => {
+          auth.signOut();
+          navigate('/login');
+        }}
+      >
+        <img src={logoutSvg}></img>
+      </div>
+      <ModalDialog
+        show={showUserInfo}
+        onHide={() => {
+          handleModalDialogHide();
+        }}
+      >
+        <button>Test</button>
+      </ModalDialog>
     </div>
   );
 }

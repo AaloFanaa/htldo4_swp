@@ -1,19 +1,10 @@
 .App {
   background-color: var(--bgColor);
   display: grid;
-  grid-template-columns: 0.5fr 1fr;
+  grid-template-columns: 0.3fr 1fr;
   grid-template-rows: 0.1fr 1fr;
   gap: 0px 0px;
   text-align: center;
   height: 100%;
   font-size: 5rem;
-}
-
-/* .App > div {
-  border: 1px solid var(--textColor);
-  border-collapse: collapse;
-} */
-
-.logoutButton {
-  position: absolute;
 }
