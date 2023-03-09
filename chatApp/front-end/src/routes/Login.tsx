@@ -49,7 +49,7 @@ function Login() {
   return (
     <div className={styles.Login}>
       <div className={styles.loginCard}>
-        <span className={styles.loginText}>Login to chat</span>
+        <span className={styles.loginText}>Login to chat!</span>
         {loginButtons.map((loginButton: loginButtonObject) => {
           return (
             <LoginButton

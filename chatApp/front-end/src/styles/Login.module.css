@@ -11,8 +11,14 @@
   display: flex;
   flex-direction: column;
   background-color: var(--bgHlColor);
+  width: 30%;
+  height: 70%;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  box-shadow: 0px 0px 18px 15px rgba(0, 0, 0, 0.2);
 }
 
 .loginText {
   font-size: 3rem;
+  margin-bottom: 3rem;
 }

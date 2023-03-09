@@ -9,8 +9,20 @@
   /* Color definitions */
 
   /* Background colors */
-  --bgColor: rgb(5, 6, 45);
-  --bgHlColor: rgb(15, 16, 98);
+  --bgColor: #181818;
+  --bgHlColor: #323232;
+
+  /* Primary colors */
+  --primColor: #d62323;
+  --primHlColor: #ba0000;
+
+  /* Secondary color */
+  --secColor: #e4e4e4;
+  --secHlColor: #cecece;
+
+  /* Tertiary color */
+  --tertColor: #0a0acc;
+  --tertHlColor: #3232c6;
 
   /* Text colors */
   --textColor: rgba(255, 255, 255, 1);
@@ -22,6 +34,6 @@ body {
   font-family: Verdana, Geneva, Tahoma, sans-serif, sans-serif;
   margin: 0;
   text-align: center;
-  background-color: rgb(5, 6, 45);
+  background-color: var(--bgColor);
   color: var(--textColor);
 }

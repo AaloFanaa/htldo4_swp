@@ -1,47 +1,60 @@
 .loginButton {
-  align-items: center;
-  background-image: linear-gradient(144deg, #af40ff, #5b42f3 50%, #00ddeb);
-  border: 0;
-  border-radius: 8px;
-  box-shadow: rgba(151, 65, 252, 0.2) 0 15px 30px -5px;
-  box-sizing: border-box;
-  color: #ffffff;
-  display: flex;
-  font-size: 20px;
-  justify-content: center;
-  line-height: 1em;
-  max-width: 100%;
-  min-width: 140px;
-  padding: 3px;
-  text-decoration: none;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-  white-space: nowrap;
+  margin: 1rem;
+  height: 15%;
+  border-radius: 0.5rem;
+  outline: none;
+  border: none;
+  position: relative;
+  background-color: var(--bgHlColor);
+  color: var(--textColor);
+  font-size: 2rem;
   cursor: pointer;
 }
 
-.loginButton:active,
-.loginButton:hover {
-  outline: 0;
+.loginButton::after {
+  content: '';
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: calc(100% + 1px);
+  height: 100%;
+  border-radius: 1rem;
+  border-top: 1px solid var(--textColor);
+  border-bottom: 1px solid var(--textColor);
+  transition: all 0.3s cubic-bezier(0.41, 0.1, 0.61, 2);
+}
+.loginButton::before {
+  content: '';
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  border-radius: 1rem;
+  height: calc(100% + 1px);
+  border-left: 1px solid var(--textColor);
+  border-right: 1px solid var(--textColor);
+  transition: all 0.3s cubic-bezier(0.41, 0.1, 0.61, 2);
+}
+
+.loginButton:active::after,
+.loginButton:hover::after {
+  top: 5px;
+  height: calc(100% - 10px);
+  border-radius: 0;
+  border-color: var(--textHlColor);
+}
+.loginButton:active::before,
+.loginButton:hover::before {
+  left: 5px;
+  width: calc(100% - 10px);
+  border-radius: 0;
+  border-color: var(--textHlColor);
 }
 
 .loginButton span {
-  background-color: rgb(5, 6, 45);
-  padding: 16px 24px;
-  border-radius: 6px;
-  width: 100%;
-  height: 100%;
-  transition: all 300ms ease-in-out;
+  transition: all 0.3s;
 }
 
 .loginButton:hover span {
-  background: none;
-}
-
-@media (min-width: 768px) {
-  .loginButton {
-    font-size: 24px;
-    min-width: 196px;
-  }
+  color: var(--textHlColor);
 }
