@@ -6,7 +6,6 @@
   align-items: center;
   padding: 1rem;
   border-right: 1px solid var(--bgHlColor);
-  position: relative;
 }
 
 .userDisplay {
@@ -47,4 +46,14 @@
 
 .logoutButton:hover {
   background-color: var(--bgHlColor);
+}
+
+.userInfoWrapper {
+  text-align: left;
+  font-size: 2rem;
+}
+
+.userInfoHead {
+  border-bottom: 1px solid var(--textColor);
+  width: 50%;
 }

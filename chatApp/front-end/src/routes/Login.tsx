@@ -58,11 +58,13 @@ function Login() {
               key={loginButton.id}
               buttonLabel={loginButton.label}
               loginProvider={loginButton.provider}
-              loginEvent={(prov: any) => loginButton.loginFunction(prov)}
-            ></LoginButton>
+              loginEvent={(prov: any) =>
+                loginButton.loginFunction(prov)
+              }></LoginButton>
           );
         })}
         <span className={styles.moreText}>Working on more options...</span>
+        <span>End to end encryption</span>
       </div>
     </div>
   );

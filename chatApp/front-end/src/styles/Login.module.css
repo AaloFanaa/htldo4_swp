@@ -8,7 +8,7 @@
   background: linear-gradient(
     135deg,
     var(--primColor) 28%,
-    #720e81 50%,
+    var(--secColor) 50%,
     var(--tertColor) 72%
   );
 }

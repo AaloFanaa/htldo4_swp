@@ -24,9 +24,11 @@ function Header() {
     setUserName(user?.displayName?.slice(0, maxNameLength - 3) + '...');
   });
 
-  const handleModalDialogHide = () => {
-    console.log('Hall');
-    setShowUserInfo(false);
+  const handleModalDialogHide = (e: Event) => {
+    e.preventDefault();
+    if (e.target === e.currentTarget) {
+      setShowUserInfo(false);
+    }
   };
 
   return (
@@ -35,13 +37,11 @@ function Header() {
         className={styles.userDisplay}
         onClick={() => {
           setShowUserInfo(true);
-        }}
-      >
+        }}>
         <img
           className={styles.userImg}
           alt='User picture'
-          src={user ? userPic : placeholderImage}
-        ></img>
+          src={user ? userPic : placeholderImage}></img>
         <span className={styles.userName}>
           {userName !== '' ? userName : 'Loading...'}
         </span>
@@ -51,17 +51,17 @@ function Header() {
         onClick={() => {
           auth.signOut();
           navigate('/login');
-        }}
-      >
+        }}>
         <img src={logoutSvg}></img>
       </div>
       <ModalDialog
         show={showUserInfo}
-        onHide={() => {
-          handleModalDialogHide();
-        }}
-      >
-        <button>Test</button>
+        onHide={event => {
+          handleModalDialogHide(event);
+        }}>
+        <div className={styles.userInfoWrapper}>
+          <span className={styles.userInfoHead}>User info</span>
+        </div>
       </ModalDialog>
     </div>
   );
