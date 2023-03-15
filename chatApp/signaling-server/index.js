@@ -1,4 +1,3 @@
-const uuid = require('uuid');
 const http = require('http');
 const WebSocket = require('ws');
 const express = require('express');
@@ -18,7 +17,7 @@ const uc = (connection, message) => {
 
 // Broadcasting a message
 const bc = (clients, type, { id, name: userName }) => {
-  Object.values(clients).forEach(client => {
+  Object.values(clients).forEach((client) => {
     if (client.name !== userName) {
       client.send(
         JSON.stringify({
@@ -30,8 +29,8 @@ const bc = (clients, type, { id, name: userName }) => {
   });
 };
 
-socketServer.on('connection', ws => {
-  ws.on('message', msg => {
+socketServer.on('connection', (ws) => {
+  ws.on('message', (msg) => {
     let data;
     try {
       data = JSON.parse(msg);
@@ -49,7 +48,6 @@ socketServer.on('connection', ws => {
             message: 'Username is already taken',
           });
         } else {
-          const id = uuid();
           const loggedIn = Object.values(users).map(
             ({ id, name: userName }) => ({ id, userName })
           );
@@ -66,7 +64,7 @@ socketServer.on('connection', ws => {
         break;
       case 'offer':
         const offerRecipient = users[name];
-        if (!!offerRecipient) {
+        if (offerRecipient) {
           sendTo(offerRecipient, {
             type: 'offer',
             offer,

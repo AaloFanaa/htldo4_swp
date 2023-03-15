@@ -43,3 +43,26 @@
   border-bottom: 1px solid var(--bgHlColor);
   z-index: -1;
 }
+
+.list {
+  display: flex;
+  flex-direction: column;
+}
+
+.newChatButton {
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  border-radius: 1rem;
+  padding: 0.5rem;
+  height: 5.5rem;
+  width: 5.5rem;
+  background-color: transparent;
+  cursor: pointer;
+  transition: all 0.3s;
+  border: 1px solid var(--textColor);
+}
+
+.newChatButton:hover {
+  border-radius: 50%;
+}

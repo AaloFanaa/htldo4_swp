@@ -4,11 +4,25 @@ import styles from '../../styles/ModalDialog.module.css';
 interface props {
   show: boolean;
   onHide: (parmas: Event) => void;
+  escPressed: () => void;
 }
 
-// useEffect(() => {}, []);
-
 export default function ModalDialog(props: React.PropsWithChildren<props>) {
+  const escFunction: (event: KeyboardEvent) => void = (
+    event: KeyboardEvent
+  ) => {
+    if (event.key === 'Escape') {
+      props.escPressed();
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('keydown', escFunction, false);
+    return () => {
+      document.removeEventListener('keydown', escFunction, false);
+    };
+  }, [escFunction]);
+
   return (
     <div
       className={props.show ? styles.ModalDialog : styles.ModalDialogHide}

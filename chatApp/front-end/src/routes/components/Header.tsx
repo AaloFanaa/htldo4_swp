@@ -31,6 +31,21 @@ function Header() {
     }
   };
 
+  const convertUnixtimestampToDate: (timestamp: string | null) => string = (
+    timestamp: string | null
+  ) => {
+    if (!timestamp) {
+      return 'Error while converting';
+    }
+    let date = new Date(timestamp);
+    let hours = date.getHours();
+    let minutes = '0' + date.getMinutes();
+    let seconds = '0' + date.getSeconds();
+    let formattedTime =
+      ' ' + hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+    return formattedTime;
+  };
+
   return (
     <div className={styles.Header}>
       <div
@@ -54,13 +69,24 @@ function Header() {
         }}>
         <img src={logoutSvg}></img>
       </div>
+      {/* User info modal */}
       <ModalDialog
         show={showUserInfo}
         onHide={event => {
           handleModalDialogHide(event);
         }}>
         <div className={styles.userInfoWrapper}>
-          <span className={styles.userInfoHead}>User info</span>
+          <div className={styles.userInfoText}>Name: {userName}</div>
+          <div className={styles.userInfoText}>Email: {user?.email}</div>
+          <div className={styles.userInfoText}>
+            Last login:
+            {convertUnixtimestampToDate(user?.metadata.lastSignInTime)}
+          </div>
+          <img
+            className={styles.userInfoImg}
+            src={userPic}
+            alt='User picture'
+          />
         </div>
       </ModalDialog>
     </div>

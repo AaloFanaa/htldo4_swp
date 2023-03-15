@@ -51,9 +51,18 @@
 .userInfoWrapper {
   text-align: left;
   font-size: 2rem;
+  display: flex;
+  flex-direction: column;
 }
 
-.userInfoHead {
-  border-bottom: 1px solid var(--textColor);
+.userInfoText {
+  padding: 1rem;
   width: 50%;
+}
+
+.userInfoImg {
+  margin: 3rem;
+  height: 15rem;
+  width: 15rem;
+  border-radius: 1rem;
 }

@@ -50,7 +50,7 @@ function Login() {
     <div className={styles.Login}>
       <div className={styles.loginCard}>
         <span className={styles.loginText}>
-          Have a <span className={styles.loginHlText}>Safe Chat</span>
+          - <span className={styles.loginHlText}>Safe Chat</span> -
         </span>
         {loginButtons.map((loginButton: loginButtonObject) => {
           return (

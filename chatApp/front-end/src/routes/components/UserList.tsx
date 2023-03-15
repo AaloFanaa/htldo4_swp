@@ -1,8 +1,19 @@
 import { useState } from 'react';
 import styles from '../../styles/UserList.module.css';
 import moreSvg from '../../assets/more.svg';
+import addChatSvg from '../../assets/addChat.svg';
+import ModalDialog from './ModalDialog';
 
 function UserList() {
+  let [showUsersAvailable, setShowUsersAvailable] = useState<boolean>(false);
+
+  const handleModalDialogHide = (e: Event) => {
+    e.preventDefault();
+    if (e.target === e.currentTarget) {
+      setShowUsersAvailable(false);
+    }
+  };
+
   return (
     <div className={styles.UserList}>
       <div className={styles.listHead}>
@@ -19,6 +30,24 @@ function UserList() {
         </div>
       </div>
       <div className={styles.list}></div>
+      <img
+        className={styles.newChatButton}
+        src={addChatSvg}
+        alt='Add Chat'
+        onClick={() => {
+          setShowUsersAvailable(true);
+        }}
+      />
+      <ModalDialog
+        show={showUsersAvailable}
+        onHide={(event) => {
+          handleModalDialogHide(event);
+        }}
+        escPressed={() => {
+          setShowUsersAvailable(false);
+        }}>
+        <div>Test</div>
+      </ModalDialog>
     </div>
   );
 }
