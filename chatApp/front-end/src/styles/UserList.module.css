@@ -66,3 +66,11 @@
 .newChatButton:hover {
   border-radius: 50%;
 }
+
+.onlineUserHead {
+  width: 100%;
+  border-bottom: 1px solid var(--textColor);
+}
+
+.onlineUserList {
+}

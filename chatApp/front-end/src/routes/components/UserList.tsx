@@ -46,7 +46,8 @@ function UserList() {
         escPressed={() => {
           setShowUsersAvailable(false);
         }}>
-        <div>Test</div>
+        <div className={styles.onlineUsersHead}>Online users</div>
+        <div className={styles.onlineUsersList}>Test</div>
       </ModalDialog>
     </div>
   );
