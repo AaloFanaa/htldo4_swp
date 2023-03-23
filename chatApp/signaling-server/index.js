@@ -6,7 +6,7 @@ const app = express();
 const server = http.createServer(app);
 const socketServer = new WebSocket.Server({ server });
 
-const port = process.env.PORT || 9000;
+const port = 9000;
 
 let users = {};
 
@@ -38,10 +38,9 @@ socketServer.on('connection', (ws) => {
       console.log('Invalid message');
       data = {};
     }
-    const { type, name, offer, answer, candidate } = data;
-    switch (type) {
+    switch (data.type) {
       case 'login':
-        if (users[name]) {
+        if (users[data.name]) {
           sendTo(ws, {
             type: 'login',
             success: false,
@@ -51,9 +50,9 @@ socketServer.on('connection', (ws) => {
           const loggedIn = Object.values(users).map(
             ({ id, name: userName }) => ({ id, userName })
           );
-          users[name] = ws;
-          ws.name = name;
-          ws.id = id;
+          users[data.name] = ws;
+          ws.name = data.name;
+          ws.id = data.id;
           sendTo(ws, {
             type: 'login',
             success: true,
@@ -63,7 +62,7 @@ socketServer.on('connection', (ws) => {
         }
         break;
       case 'offer':
-        const offerRecipient = users[name];
+        const offerRecipient = users[data.name];
         if (offerRecipient) {
           sendTo(offerRecipient, {
             type: 'offer',

@@ -23,6 +23,7 @@
   justify-content: space-between;
   align-items: center;
   width: 20%;
+  cursor: default;
 }
 
 .chatBackground > div > img {
