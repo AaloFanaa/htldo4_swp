@@ -24,6 +24,7 @@
   align-items: center;
   width: 20%;
   cursor: default;
+  user-select: none;
 }
 
 .chatBackground > div > img {

@@ -1,22 +1,23 @@
-const http = require('http');
-const WebSocket = require('ws');
 const express = require('express');
+const WebSocket = require('ws');
+const http = require('http');
+const uuidv4 = require('uuid/v4');
 
 const app = express();
-const server = http.createServer(app);
-const socketServer = new WebSocket.Server({ server });
 
-const port = 9000;
+const port = process.env.PORT || 9000;
+
+const server = http.createServer(app);
+
+const wss = new WebSocket.Server({ server });
 
 let users = {};
 
-// Unicasting a message
-const uc = (connection, message) => {
+const sendTo = (connection, message) => {
   connection.send(JSON.stringify(message));
 };
 
-// Broadcasting a message
-const bc = (clients, type, { id, name: userName }) => {
+const sendToAll = (clients, type, { id, name: userName }) => {
   Object.values(clients).forEach((client) => {
     if (client.name !== userName) {
       client.send(
@@ -29,30 +30,32 @@ const bc = (clients, type, { id, name: userName }) => {
   });
 };
 
-socketServer.on('connection', (ws) => {
+wss.on('connection', (ws) => {
   ws.on('message', (msg) => {
     let data;
     try {
       data = JSON.parse(msg);
     } catch (e) {
-      console.log('Invalid message');
+      console.log('Invalid JSON');
       data = {};
     }
-    switch (data.type) {
+    const { type, name, offer, answer, candidate } = data;
+    switch (type) {
       case 'login':
-        if (users[data.name]) {
+        if (users[name]) {
           sendTo(ws, {
             type: 'login',
             success: false,
-            message: 'Username is already taken',
+            message: 'Username is unavailable',
           });
         } else {
+          const id = uuidv4();
           const loggedIn = Object.values(users).map(
             ({ id, name: userName }) => ({ id, userName })
           );
-          users[data.name] = ws;
-          ws.name = data.name;
-          ws.id = data.id;
+          users[name] = ws;
+          ws.name = name;
+          ws.id = id;
           sendTo(ws, {
             type: 'login',
             success: true,
@@ -62,8 +65,8 @@ socketServer.on('connection', (ws) => {
         }
         break;
       case 'offer':
-        const offerRecipient = users[data.name];
-        if (offerRecipient) {
+        const offerRecipient = users[name];
+        if (!!offerRecipient) {
           sendTo(offerRecipient, {
             type: 'offer',
             offer,
@@ -117,11 +120,11 @@ socketServer.on('connection', (ws) => {
   ws.send(
     JSON.stringify({
       type: 'connect',
-      message: 'Connection to signaling server working',
+      message: 'Well hello there, I am a WebSocket server',
     })
   );
 });
-
+//start our server
 server.listen(port, () => {
   console.log(`Signaling Server running on port: ${port}`);
 });
