@@ -1,14 +1,11 @@
 const express = require('express');
 const WebSocket = require('ws');
 const http = require('http');
-const uuidv4 = require('uuid/v4');
+const uuidv4 = require('uuid');
 
 const app = express();
-
-const port = process.env.PORT || 9000;
-
+const port = 9000;
 const server = http.createServer(app);
-
 const wss = new WebSocket.Server({ server });
 
 let users = {};
@@ -31,6 +28,7 @@ const sendToAll = (clients, type, { id, name: userName }) => {
 };
 
 wss.on('connection', (ws) => {
+  console.log(ws);
   ws.on('message', (msg) => {
     let data;
     try {
@@ -46,7 +44,7 @@ wss.on('connection', (ws) => {
           sendTo(ws, {
             type: 'login',
             success: false,
-            message: 'Username is unavailable',
+            message: 'Username is not available',
           });
         } else {
           const id = uuidv4();
@@ -120,11 +118,11 @@ wss.on('connection', (ws) => {
   ws.send(
     JSON.stringify({
       type: 'connect',
-      message: 'Well hello there, I am a WebSocket server',
+      message: 'Connected to signaling server',
     })
   );
 });
 //start our server
 server.listen(port, () => {
-  console.log(`Signaling Server running on port: ${port}`);
+  console.log(`Server running on port: ${port}`);
 });
