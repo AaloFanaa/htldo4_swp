@@ -1,8 +1,7 @@
 import { useState } from 'react';
-import styles from '../../styles/UserList.module.css';
-import moreSvg from '../../assets/more.svg';
-import addChatSvg from '../../assets/addChat.svg';
-import ModalDialog from './ModalDialog';
+import styles from '../styles/UserList.module.css';
+import moreSvg from '../assets/more.svg';
+import addChatSvg from '../assets/addChat.svg';
 
 function UserList() {
   let [showUsersAvailable, setShowUsersAvailable] = useState<boolean>(false);
@@ -38,17 +37,6 @@ function UserList() {
           setShowUsersAvailable(true);
         }}
       />
-      <ModalDialog
-        show={showUsersAvailable}
-        onHide={(event) => {
-          handleModalDialogHide(event);
-        }}
-        escPressed={() => {
-          setShowUsersAvailable(false);
-        }}>
-        <div className={styles.onlineUsersHead}>Online users</div>
-        <div className={styles.onlineUsersList}>Test</div>
-      </ModalDialog>
     </div>
   );
 }

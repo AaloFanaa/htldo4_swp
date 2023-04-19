@@ -35,9 +35,149 @@
   text-transform: uppercase;
 }
 
-.moreText {
-  margin-top: 2.5rem;
+.loginInputName {
+  align-self: center;
+  margin: 2rem 0;
+  width: 90%;
+}
+
+.loginButton {
+  margin: 1em;
+  position: relative;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.125rem;
+  line-height: 1;
   font-size: 2rem;
+  padding: 2rem 1rem;
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  color: var(--textColor);
+}
+
+.loginButton:hover {
+  animation: hoverTextColor 1s forwards;
+}
+
+.loginButton:before,
+.loginButton:after {
+  content: '';
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  transition: all 100ms;
+}
+.loginButton:before {
+  top: 0;
+  left: 0;
+  box-shadow: inset 1px 1px 0 0 var(--textColor);
+}
+.loginButton:after {
+  right: 0;
+  bottom: 0;
+  box-shadow: inset -1px -1px 0 0 var(--textColor);
+}
+
+.loginButton:hover:before {
+  animation: hoverShadowBefore 1s forwards;
+}
+.loginButton:hover:after {
+  animation: hoverShadowAfter 1s forwards;
+}
+
+@keyframes hoverTextColor {
+  0% {
+    color: var(--primColor);
+  }
+  25% {
+    color: var(--secColor);
+  }
+  50% {
+    color: var(--tertColor);
+  }
+  75% {
+    color: var(--secColor);
+  }
+  100% {
+    color: var(--primColor);
+  }
+}
+
+@keyframes hoverShadowBefore {
+  0% {
+    width: 100%;
+    height: 1px;
+    top: 0;
+    left: 0;
+    box-shadow: inset 1px 1px 0 0 var(--primColor);
+  }
+  25% {
+    box-shadow: inset 1px 1px 0 0 var(--secColor);
+  }
+  33% {
+    width: 1px;
+    height: 100%;
+    top: 0;
+    left: 0;
+  }
+  50% {
+    box-shadow: inset 1px 1px 0 0 var(--tertColor);
+  }
+  66% {
+    width: 1px;
+    height: 1px;
+    top: calc(100% - 1px);
+    left: 0;
+  }
+  75% {
+    box-shadow: inset 1px 1px 0 0 var(--secColor);
+  }
+  100% {
+    width: 100%;
+    height: 1px;
+    top: calc(100% - 1px);
+    left: 0;
+    box-shadow: inset 1px 1px 0 0 var(--primColor);
+  }
+}
+
+@keyframes hoverShadowAfter {
+  0% {
+    width: 100%;
+    height: 1px;
+    box-shadow: inset -1px -1px 0 0 var(--primColor);
+  }
+  25% {
+    box-shadow: inset -1px -1px 0 0 var(--secColor);
+  }
+  33% {
+    width: 1px;
+    height: 100%;
+    bottom: 0;
+    right: 0;
+  }
+  50% {
+    box-shadow: inset -1px -1px 0 0 var(--tertColor);
+  }
+  66% {
+    width: 1px;
+    height: 1px;
+    bottom: calc(100% - 1px);
+    right: 0;
+  }
+  75% {
+    box-shadow: inset -1px -1px 0 0 var(--secColor);
+  }
+  100% {
+    width: 100%;
+    height: 1px;
+    bottom: calc(100% - 1px);
+    right: 0;
+    box-shadow: inset -1px -1px 0 0 var(--primColor);
+  }
 }
 
 @keyframes glow {
