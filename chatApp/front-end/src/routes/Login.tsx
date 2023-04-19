@@ -64,7 +64,6 @@ function Login() {
           );
         })}
         <span className={styles.moreText}>Working on more options...</span>
-        <span>End to end encryption</span>
       </div>
     </div>
   );

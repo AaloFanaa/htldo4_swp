@@ -69,10 +69,9 @@ function Header() {
         }}>
         <img src={logoutSvg}></img>
       </div>
-      {/* User info modal */}
-      <ModalDialog
+      {/* <ModalDialog
         show={showUserInfo}
-        onHide={event => {
+        onHide={(event) => {
           handleModalDialogHide(event);
         }}>
         <div className={styles.userInfoWrapper}>
@@ -80,7 +79,7 @@ function Header() {
           <div className={styles.userInfoText}>Email: {user?.email}</div>
           <div className={styles.userInfoText}>
             Last login:
-            {convertUnixtimestampToDate(user?.metadata.lastSignInTime)}
+            {convertUnixtimestampToDate(user?.metadata.lastSignInTime!)}
           </div>
           <img
             className={styles.userInfoImg}
@@ -88,7 +87,7 @@ function Header() {
             alt='User picture'
           />
         </div>
-      </ModalDialog>
+      </ModalDialog> */}
     </div>
   );
 }
