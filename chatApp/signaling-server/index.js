@@ -1,8 +1,7 @@
 const express = require('express');
 const WebSocket = require('ws');
 const http = require('http');
-const uuidv4 = require('uuid');
-
+const { uuid } = require('uuidv4');
 const app = express();
 const port = 9000;
 const server = http.createServer(app);
@@ -47,7 +46,7 @@ wss.on('connection', (ws) => {
             message: 'Username is not available',
           });
         } else {
-          const id = uuidv4();
+          const id = uuid();
           const loggedIn = Object.values(users).map(
             ({ id, name: userName }) => ({ id, userName })
           );
@@ -118,11 +117,10 @@ wss.on('connection', (ws) => {
   ws.send(
     JSON.stringify({
       type: 'connect',
-      message: 'Connected to signaling server',
+      message: 'Connected to server',
     })
   );
 });
-//start our server
 server.listen(port, () => {
-  console.log(`Server running on port: ${port}`);
+  console.log(`Server running! Port: ${port}`);
 });
