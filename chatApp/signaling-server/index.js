@@ -105,7 +105,7 @@ wss.on('connection', (ws) => {
       default:
         sendTo(ws, {
           type: 'error',
-          message: 'Command not found: ' + type,
+          message: 'Type not found: ' + type,
         });
         break;
     }

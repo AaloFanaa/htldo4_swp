@@ -57,9 +57,9 @@
   color: var(--textColor);
 }
 
-.loginButton:hover {
+/* .loginButton:hover {
   animation: hoverTextColor 1s forwards;
-}
+} */
 
 .loginButton:before,
 .loginButton:after {

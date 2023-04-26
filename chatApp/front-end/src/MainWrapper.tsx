@@ -101,6 +101,4 @@ interface props {
   updateCurrentChannel: any;
 }
 
-interface loginMessage {}
-
 export default MainWrapper;
