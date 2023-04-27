@@ -44,16 +44,16 @@ const MainWrapper = (props: props) => {
 
   //Handle socket messages
   useEffect(() => {
-    let data = socketMessages.pop();
+    let data: any = socketMessages.pop();
     if (data) {
       switch (data.type) {
         case 'connect':
           setSocketOpen(true);
           console.log('Connected!');
           break;
-        // case 'login':
-        //   onLogin(data);
-        //   break;
+        case 'login':
+          onLogin(data);
+          break;
         // case 'updateUsers':
         //   updateUsersList(data);
         //   break;
@@ -76,7 +76,24 @@ const MainWrapper = (props: props) => {
   }, [socketMessages]);
 
   //function for sending messages
-  const sendSocketMessage = () => {};
+  const sendSocketMessage = (message: Object) => {
+    webSocket.current?.send(JSON.stringify(message));
+  };
+
+  const handleLogin: () => void = () => {
+    setLoggingIn(true);
+    sendSocketMessage({
+      type: 'login',
+      name,
+    });
+  };
+
+  const onLogin: (data: any) => void = (data: any) => {
+    setLoggingIn(false);
+    if (data.success) {
+      console.log('Logged in!');
+    }
+  };
 
   return (
     <>
@@ -87,7 +104,14 @@ const MainWrapper = (props: props) => {
           <Chat></Chat>
         </div>
       ) : (
-        <Login></Login>
+        <Login
+          onNameChange={(username: string) => {
+            setName(username);
+          }}
+          onNameSubmit={() => {
+            handleLogin();
+          }}
+        ></Login>
       )}
     </>
   );

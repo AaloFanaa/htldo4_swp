@@ -18,7 +18,7 @@
   flex-direction: column;
   background-color: var(--bgColor);
   width: 30%;
-  height: 70%;
+  height: 50%;
   padding: 2rem;
   border-radius: 0.5rem;
   box-shadow: 0px 0px 18px 15px rgba(0, 0, 0, 0.2);
@@ -35,13 +35,46 @@
   text-transform: uppercase;
 }
 
+.loginForm {
+  width: 100%;
+  height: 60%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+}
+
 .loginInputName {
   align-self: center;
   margin: 2rem 0;
-  width: 90%;
+  padding: 0.2rem 0.5rem;
+  width: 70%;
+  height: 13%;
+  color: var(--textColor);
+  outline: none;
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid var(--fgColor);
+  position: relative;
+  display: inline-block;
+}
+
+.loginInputName:focus {
+  background-color: var(--bgHlColor);
+}
+.loginInputName:hover {
+  background-color: var(--bgHlColor);
+}
+
+.loginInputName::after {
+  content: '';
+  position: absolute;
+  height: 100%;
+  width: 100%;
 }
 
 .loginButton {
+  width: 70%;
   margin: 1em;
   position: relative;
   font-size: 1rem;
@@ -54,12 +87,13 @@
   border: none;
   outline: none;
   cursor: pointer;
-  color: var(--textColor);
+  color: var(--fgColor);
+  transition: all 0.2s;
 }
 
-/* .loginButton:hover {
-  animation: hoverTextColor 1s forwards;
-} */
+.loginButton:hover {
+  color: var(--textColor);
+}
 
 .loginButton:before,
 .loginButton:after {
@@ -73,19 +107,14 @@
 .loginButton:before {
   top: 0;
   left: 0;
-  box-shadow: inset 1px 1px 0 0 var(--textColor);
+  box-shadow: inset 1px 1px 0 0 var(--fgColor);
+  animation: hoverShadowBefore 2s infinite;
 }
 .loginButton:after {
   right: 0;
   bottom: 0;
-  box-shadow: inset -1px -1px 0 0 var(--textColor);
-}
-
-.loginButton:hover:before {
-  animation: hoverShadowBefore 1s forwards;
-}
-.loginButton:hover:after {
-  animation: hoverShadowAfter 1s forwards;
+  box-shadow: inset -1px -1px 0 0 var(--fgColor);
+  animation: hoverShadowAfter 2s infinite;
 }
 
 @keyframes hoverTextColor {

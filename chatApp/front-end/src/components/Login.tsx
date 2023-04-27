@@ -1,8 +1,26 @@
-import { FormEventHandler } from 'react';
+import { FormEventHandler, useEffect, useState } from 'react';
 import styles from '../styles/Login.module.css';
 
-function Login() {
-  const handleSubmit = () => {};
+interface propsInterface {
+  onNameSubmit: () => void;
+  onNameChange: (name: string) => void;
+}
+
+function Login(props: propsInterface) {
+  const [nameValue, setNameValue] = useState<string>('');
+
+  const handleChange = (event: any) => {
+    setNameValue(event.target.value);
+  };
+
+  const handleSubmit = (event: any) => {
+    event.preventDefault();
+    props.onNameSubmit();
+  };
+
+  useEffect(() => {
+    props.onNameChange(nameValue);
+  }, [handleSubmit]);
 
   return (
     <div className={styles.Login}>
@@ -10,11 +28,13 @@ function Login() {
         <span className={styles.loginText}>
           - <span className={styles.loginHlText}>Safe Chat</span> -
         </span>
-        <form method='post' onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className={styles.loginForm}>
           <input
+            id='nameInput'
+            placeholder='Name'
             className={styles.loginInputName}
             type='text'
-            placeholder='Enter a name'
+            onChange={handleChange}
           />
           <button className={styles.loginButton} type='submit'>
             Start chatting!
