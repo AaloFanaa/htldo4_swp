@@ -56,11 +56,12 @@
   border: none;
   border-bottom: 1px solid var(--fgColor);
   position: relative;
-  display: inline-block;
+  transition: all 0.2s;
 }
 
 .loginInputName:focus {
   background-color: var(--bgHlColor);
+  border-bottom: 1px solid var(--fgHlColor);
 }
 .loginInputName:hover {
   background-color: var(--bgHlColor);

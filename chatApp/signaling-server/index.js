@@ -9,11 +9,11 @@ const wss = new WebSocket.Server({ server });
 
 let users = {};
 
-const sendTo = (connection, message) => {
+const unicast = (connection, message) => {
   connection.send(JSON.stringify(message));
 };
 
-const sendToAll = (clients, type, { id, name: userName }) => {
+const broadcast = (clients, type, { id, name: userName }) => {
   Object.values(clients).forEach((client) => {
     if (client.name !== userName) {
       client.send(
@@ -40,7 +40,7 @@ wss.on('connection', (ws) => {
     switch (type) {
       case 'login':
         if (users[name]) {
-          sendTo(ws, {
+          unicast(ws, {
             type: 'login',
             success: false,
             message: 'Username is not available',
@@ -53,24 +53,24 @@ wss.on('connection', (ws) => {
           users[name] = ws;
           ws.name = name;
           ws.id = id;
-          sendTo(ws, {
+          unicast(ws, {
             type: 'login',
             success: true,
             users: loggedIn,
           });
-          sendToAll(users, 'updateUsers', ws);
+          broadcast(users, 'updateUsers', ws);
         }
         break;
       case 'offer':
         const offerRecipient = users[name];
         if (!!offerRecipient) {
-          sendTo(offerRecipient, {
+          unicast(offerRecipient, {
             type: 'offer',
             offer,
             name: ws.name,
           });
         } else {
-          sendTo(ws, {
+          unicast(ws, {
             type: 'error',
             message: `User ${name} does not exist!`,
           });
@@ -79,12 +79,12 @@ wss.on('connection', (ws) => {
       case 'answer':
         const answerRecipient = users[name];
         if (!!answerRecipient) {
-          sendTo(answerRecipient, {
+          unicast(answerRecipient, {
             type: 'answer',
             answer,
           });
         } else {
-          sendTo(ws, {
+          unicast(ws, {
             type: 'error',
             message: `User ${name} does not exist!`,
           });
@@ -93,17 +93,17 @@ wss.on('connection', (ws) => {
       case 'candidate':
         const candidateRecipient = users[name];
         if (!!candidateRecipient) {
-          sendTo(candidateRecipient, {
+          unicast(candidateRecipient, {
             type: 'candidate',
             candidate,
           });
         }
         break;
       case 'leave':
-        sendToAll(users, 'leave', ws);
+        broadcast(users, 'leave', ws);
         break;
       default:
-        sendTo(ws, {
+        unicast(ws, {
           type: 'error',
           message: 'Type not found: ' + type,
         });
@@ -112,7 +112,7 @@ wss.on('connection', (ws) => {
   });
   ws.on('close', function () {
     delete users[ws.name];
-    sendToAll(users, 'leave', ws);
+    broadcast(users, 'leave', ws);
   });
   ws.send(
     JSON.stringify({

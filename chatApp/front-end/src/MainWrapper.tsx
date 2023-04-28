@@ -11,7 +11,7 @@ import Login from './components/Login';
 // };
 
 //local config
-const configuration = null;
+const configuration: RTCConfiguration | undefined = undefined;
 
 const MainWrapper = (props: props) => {
   const [socketOpen, setSocketOpen] = useState<boolean>(false);
@@ -91,8 +91,11 @@ const MainWrapper = (props: props) => {
   const onLogin: (data: any) => void = (data: any) => {
     setLoggingIn(false);
     if (data.success) {
-      console.log('Logged in!');
+      alert(`Login was successfull!\nLogged in as: ${name}`);
     }
+    setIsLoggedIn(true);
+    setUsers(data.users);
+    let localConnection = new RTCPeerConnection(configuration);
   };
 
   return (
@@ -110,8 +113,7 @@ const MainWrapper = (props: props) => {
           }}
           onNameSubmit={() => {
             handleLogin();
-          }}
-        ></Login>
+          }}></Login>
       )}
     </>
   );
