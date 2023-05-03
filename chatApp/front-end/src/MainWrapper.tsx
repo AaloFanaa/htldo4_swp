@@ -102,7 +102,10 @@ const MainWrapper = (props: props) => {
     <>
       {isLoggedIn ? (
         <div className={styles.App}>
-          <Header></Header>
+          <Header
+            logoutSubmit={() => {
+              handleLogout();
+            }}></Header>
           <UserList></UserList>
           <Chat></Chat>
         </div>

@@ -15,6 +15,10 @@ function Login(props: propsInterface) {
 
   const handleSubmit = (event: any) => {
     event.preventDefault();
+    if (nameValue.length === 0) {
+      alert('Name cannot be empty!');
+      return;
+    }
     props.onNameSubmit();
   };
 
