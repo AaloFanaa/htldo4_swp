@@ -27,7 +27,7 @@ const broadcast = (clients, type, { id, name: userName }) => {
 };
 
 wss.on('connection', (ws) => {
-  console.log(ws);
+  // console.log(ws);
   ws.on('message', (msg) => {
     let data;
     try {
@@ -45,6 +45,7 @@ wss.on('connection', (ws) => {
             success: false,
             message: 'Username is not available',
           });
+          console.log('User tried to login with name: ');
         } else {
           const id = uuid();
           const loggedIn = Object.values(users).map(
@@ -58,7 +59,9 @@ wss.on('connection', (ws) => {
             success: true,
             users: loggedIn,
           });
+          console.log('User successfully logged in as: ');
           broadcast(users, 'updateUsers', ws);
+          console.log('Updated user list: ');
         }
         break;
       case 'offer':
@@ -101,6 +104,7 @@ wss.on('connection', (ws) => {
         break;
       case 'leave':
         broadcast(users, 'leave', ws);
+        console.log('User leaved: ');
         break;
       default:
         unicast(ws, {

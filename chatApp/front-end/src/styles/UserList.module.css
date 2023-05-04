@@ -49,47 +49,8 @@
   flex-direction: column;
 }
 
-.newChatButton {
-  justify-self: flex-end;
-  position: relative;
-  border-radius: 1rem;
-  padding: 0.5rem;
-  height: 5.5rem;
-  width: 5.5rem;
-  background-color: transparent;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-
-.newChatButton::after {
-  content: 0;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 10;
-}
-
-.newChatButton::after:hover {
-  animation: newChatButtonAnimation 0.5s forwards;
-}
-
-.onlineUserHead {
-  width: 100%;
-  border-bottom: 1px solid var(--textColor);
-}
-
-.onlineUserList {
-  font-size: 1rem;
-}
-
-@keyframes newChatButtonAnimation {
-  0% {
-    border: none;
-  }
-
-  100% {
-    border: solid 5px var(--textColor);
-  }
+.listUser {
+  font-size: 1.7rem;
+  text-align: left;
+  padding: 1.5rem;
 }

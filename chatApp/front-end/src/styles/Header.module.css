@@ -10,6 +10,7 @@
 
 .userDisplay {
   display: flex;
+  justify-content: space-between;
   width: auto;
   padding: 2rem;
   border-radius: 1rem;
@@ -21,17 +22,15 @@
   background-color: var(--bgHlColor);
 }
 
-.userImg {
-  aspect-ratio: 1;
-  border-radius: 50%;
-  height: 4.5rem;
-}
-
 .userName {
-  font-size: 2rem;
   display: flex;
   align-items: center;
-  padding-left: 1rem;
+  font-size: 1.75rem;
+  padding-left: 0.8rem;
+}
+
+.userText {
+  font-size: 1.75rem;
 }
 
 .logoutButton {

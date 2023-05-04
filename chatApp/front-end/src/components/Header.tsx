@@ -8,9 +8,6 @@ interface propsInterface {
 }
 
 function Header(props: propsInterface) {
-  let [userName, setUserName] = useState<string>('');
-  let [showUserInfo, setShowUserInfo] = useState<boolean>(false);
-
   const logout = () => {
     console.log('logout');
     props.logoutSubmit();
@@ -19,6 +16,7 @@ function Header(props: propsInterface) {
   return (
     <div className={styles.Header}>
       <div className={styles.userDisplay}>
+        <span className={styles.userText}>Logged in as: </span>
         <span className={styles.userName}>
           {props.userName !== '' ? props.userName : 'Loading...'}
         </span>

@@ -5,12 +5,20 @@ import UserList from './components/UserList';
 import Header from './components/Header';
 import Login from './components/Login';
 
-//remote config
+//Interface declaration
+interface props {
+  readonly currentConnection: any;
+  readonly currentChannel: any;
+  updateCurrentConnection: any;
+  updateCurrentChannel: any;
+}
+
+//remote config (prod)
 // const configuration = {
 //   iceServers: [{ url: "stun:stun.1.google.com:19302" }]
 // };
 
-//local config
+//test config (local)
 const configuration: RTCConfiguration | undefined = undefined;
 
 const MainWrapper = (props: props) => {
@@ -49,35 +57,34 @@ const MainWrapper = (props: props) => {
       switch (data.type) {
         case 'connect':
           setSocketOpen(true);
-          console.log('Connected!');
+          console.log('Connected to signaling server!');
           break;
         case 'login':
           onLogin(data);
           break;
-        // case 'updateUsers':
-        //   updateUsersList(data);
-        //   break;
+        case 'updateUsers':
+          updateUsersList(data);
+          break;
         // case 'removeUser':
         //   removeUser(data);
         //   break;
         // case 'offer':
         //   onOffer(data);
         //   break;
-        // case 'answer':
-        //   onAnswer(data);
-        //   break;
-        // case 'candidate':
-        //   onCandidate(data);
-        //   break;
+        case 'answer':
+          onAnswer(data);
+          break;
+        case 'candidate':
+          onCandidate(data);
+          break;
         default:
           break;
       }
     }
   }, [socketMessages]);
 
-  //function for sending messages
-  const sendSocketMessage = (message: Object) => {
-    webSocket.current?.send(JSON.stringify(message));
+  const updateUsersList: (data: any) => void = (data: any) => {
+    setUsers((prev: Array<never>) => [...prev, data.user] as Array<never>);
   };
 
   const handleLogin: () => void = () => {
@@ -92,10 +99,59 @@ const MainWrapper = (props: props) => {
     setLoggingIn(false);
     if (data.success) {
       alert(`Login was successfull!\nLogged in as: ${name}`);
+      setIsLoggedIn(true);
+      setUsers(data.users);
+      let localConnection = new RTCPeerConnection(configuration);
+      localConnection.onicecandidate = ({ candidate }) => {
+        let connectedTo = connectedRef.current;
+
+        if (candidate && !!connectedTo) {
+          sendSocketMessage({
+            name: connectedTo,
+            type: 'candidate',
+            candidate,
+          });
+        }
+      };
+      localConnection.ondatachannel = (event: RTCDataChannelEvent) => {
+        console.log('Data channel created');
+        let localDataChannel = event.channel;
+        localDataChannel.onopen = () => {
+          console.log('data channel opened');
+        };
+        localDataChannel.onmessage = onDataChannelMessage;
+        props.updateCurrentChannel(localDataChannel);
+      };
+      props.updateCurrentConnection(localConnection);
+    } else {
+      alert('An error occurred while trying to connect!');
     }
-    setIsLoggedIn(true);
-    setUsers(data.users);
-    let localConnection = new RTCPeerConnection(configuration);
+  };
+
+  const handleLogout: () => void = () => {};
+
+  //Handeling of datachannel messages
+  const onDataChannelMessage: (event: MessageEvent<any>) => any = (
+    event: MessageEvent
+  ) => {
+    console.log(event.target);
+    //TODO: handle data messages
+  };
+
+  const onAnswer: (data: any) => void = (data: any) => {
+    props.currentConnection.setRemoteDescription(
+      new RTCSessionDescription(data.answer)
+    );
+  };
+
+  const onCandidate: (data: any) => void = (data: any) => {
+    props.currentConnection.addIceCandidate(
+      new RTCIceCandidate(data.candidate)
+    );
+  };
+
+  const sendSocketMessage = (message: Object) => {
+    webSocket.current?.send(JSON.stringify(message));
   };
 
   return (
@@ -103,10 +159,11 @@ const MainWrapper = (props: props) => {
       {isLoggedIn ? (
         <div className={styles.App}>
           <Header
+            userName={name}
             logoutSubmit={() => {
               handleLogout();
             }}></Header>
-          <UserList></UserList>
+          <UserList userList={users} userName={name}></UserList>
           <Chat></Chat>
         </div>
       ) : (
@@ -121,13 +178,5 @@ const MainWrapper = (props: props) => {
     </>
   );
 };
-
-//Interface declaration
-interface props {
-  readonly currentConnection: any;
-  readonly currentChannel: any;
-  updateCurrentConnection: any;
-  updateCurrentChannel: any;
-}
 
 export default MainWrapper;
