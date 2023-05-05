@@ -61,7 +61,7 @@ wss.on('connection', (ws) => {
           });
           console.log('User successfully logged in as: ');
           broadcast(users, 'updateUsers', ws);
-          console.log('Updated user list: ');
+          console.log('Updated user list!');
         }
         break;
       case 'offer':
@@ -103,8 +103,9 @@ wss.on('connection', (ws) => {
         }
         break;
       case 'leave':
-        broadcast(users, 'leave', ws);
-        console.log('User leaved: ');
+        delete users[ws.name];
+        broadcast(users, 'updateUsers', ws);
+        console.log('User left: ', ws.name);
         break;
       default:
         unicast(ws, {
@@ -116,7 +117,8 @@ wss.on('connection', (ws) => {
   });
   ws.on('close', function () {
     delete users[ws.name];
-    broadcast(users, 'leave', ws);
+    broadcast(users, 'updateUser', ws);
+    console.log('User left: ', ws.name);
   });
   ws.send(
     JSON.stringify({

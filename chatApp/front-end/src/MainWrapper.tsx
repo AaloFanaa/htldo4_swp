@@ -85,6 +85,7 @@ const MainWrapper = (props: props) => {
 
   const updateUsersList: (data: any) => void = (data: any) => {
     setUsers((prev: Array<never>) => [...prev, data.user] as Array<never>);
+    console.log(users);
   };
 
   const handleLogin: () => void = () => {
@@ -128,7 +129,9 @@ const MainWrapper = (props: props) => {
     }
   };
 
-  const handleLogout: () => void = () => {};
+  const handleLogout: () => void = () => {
+    //TODO: Handle logging out
+  };
 
   //Handeling of datachannel messages
   const onDataChannelMessage: (event: MessageEvent<any>) => any = (

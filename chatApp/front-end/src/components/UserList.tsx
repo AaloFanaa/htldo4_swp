@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from '../styles/UserList.module.css';
 import moreSvg from '../assets/more.svg';
 import addChatSvg from '../assets/addChat.svg';
@@ -16,14 +16,11 @@ interface userEntry {
 }
 
 function UserList(props: propsInterface) {
-  let [showUsersAvailable, setShowUsersAvailable] = useState<boolean>(false);
+  const [users, setUsers] = useState<Array<userEntry>>();
 
-  const handleModalDialogHide = (e: Event) => {
-    e.preventDefault();
-    if (e.target === e.currentTarget) {
-      setShowUsersAvailable(false);
-    }
-  };
+  useEffect(() => {
+    setUsers(props.userList);
+  }, [props.userList]);
 
   return (
     <div className={styles.UserList}>
@@ -41,7 +38,7 @@ function UserList(props: propsInterface) {
         </div>
       </div>
       <div className={styles.list}>
-        {props.userList.map((user) => {
+        {users?.map((user: userEntry) => {
           return (
             <>
               <span className={styles.listUser}>
