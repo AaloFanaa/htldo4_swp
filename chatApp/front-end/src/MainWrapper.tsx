@@ -65,9 +65,9 @@ const MainWrapper = (props: props) => {
         case 'updateUsers':
           updateUsersList(data);
           break;
-        // case 'removeUser':
-        //   removeUser(data);
-        //   break;
+        case 'removeUser':
+          removeUser(data);
+          break;
         // case 'offer':
         //   onOffer(data);
         //   break;
@@ -85,6 +85,15 @@ const MainWrapper = (props: props) => {
 
   const updateUsersList: (data: any) => void = (data: any) => {
     setUsers((prev: Array<never>) => [...prev, data.user] as Array<never>);
+    console.log(users);
+  };
+
+  const removeUser: (data: any) => void = (data: any) => {
+    setUsers((prev: Array<never>) =>
+      prev.filter((user) => {
+        user !== data.user;
+      })
+    );
     console.log(users);
   };
 

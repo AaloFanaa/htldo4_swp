@@ -115,10 +115,18 @@ wss.on('connection', (ws) => {
         break;
     }
   });
-  ws.on('close', function () {
-    delete users[ws.name];
-    broadcast(users, 'updateUser', ws);
-    console.log('User left: ', ws.name);
+  ws.on('close', () => {
+    console.log(ws.name, ' disconnected');
+    if (ws.name) {
+      delete users[ws.name];
+      if (ws.otherName) {
+        const recipient = users[ws.otherName];
+        if (!!recipient) {
+          recipient.otherName = null;
+        }
+      }
+    }
+    broadcast(users, 'removeUser', ws);
   });
   ws.send(
     JSON.stringify({
