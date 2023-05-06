@@ -52,5 +52,14 @@
 .listUser {
   font-size: 1.7rem;
   text-align: left;
-  padding: 1.5rem;
+  margin: 1rem 1.5rem;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  background-color: var(--fgColor);
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.listUser:hover {
 }
