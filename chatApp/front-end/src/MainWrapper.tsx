@@ -13,6 +13,11 @@ interface props {
   updateCurrentChannel: any;
 }
 
+interface userEntry {
+  id: string;
+  userName: string;
+}
+
 //remote config (prod)
 // const configuration = {
 //   iceServers: [{ url: "stun:stun.1.google.com:19302" }]
@@ -21,13 +26,15 @@ interface props {
 //test config (local)
 const configuration: RTCConfiguration | undefined = undefined;
 
+const testUser: Array<userEntry> = [{ id: '12345', userName: 'Test-User' }];
+
 const MainWrapper = (props: props) => {
   const [socketOpen, setSocketOpen] = useState<boolean>(false);
   const [socketMessages, setSocketMessages] = useState<Array<any>>([]);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [name, setName] = useState<string>('');
   const [loggingIn, setLoggingIn] = useState<boolean>(false);
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState<Array<userEntry>>(testUser);
   const [connectedTo, setConnectedTo] = useState('');
   const [connecting, setConnecting] = useState<boolean>(false);
   const connectedRef = useRef();
@@ -84,12 +91,14 @@ const MainWrapper = (props: props) => {
   }, [socketMessages]);
 
   const updateUsersList: (data: any) => void = (data: any) => {
-    setUsers((prev: Array<never>) => [...prev, data.user] as Array<never>);
+    setUsers(
+      (prev: Array<userEntry>) => [...prev, data.user] as Array<userEntry>
+    );
     console.log(users);
   };
 
   const removeUser: (data: any) => void = (data: any) => {
-    setUsers((prev: Array<never>) =>
+    setUsers((prev: Array<userEntry>) =>
       prev.filter((user) => {
         user !== data.user;
       })
