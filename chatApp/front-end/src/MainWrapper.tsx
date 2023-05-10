@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { MutableRefObject, useEffect, useRef, useState } from 'react';
 import styles from './styles/MainWrapper.module.css';
 import Chat from './components/Chat';
 import UserList from './components/UserList';
@@ -26,18 +26,16 @@ interface userEntry {
 //test config (local)
 const configuration: RTCConfiguration | undefined = undefined;
 
-const testUser: Array<userEntry> = [{ id: '12345', userName: 'Test-User' }];
-
 const MainWrapper = (props: props) => {
   const [socketOpen, setSocketOpen] = useState<boolean>(false);
   const [socketMessages, setSocketMessages] = useState<Array<any>>([]);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [name, setName] = useState<string>('');
   const [loggingIn, setLoggingIn] = useState<boolean>(false);
-  const [users, setUsers] = useState<Array<userEntry>>(testUser);
+  const [users, setUsers] = useState<Array<userEntry>>([]);
   const [connectedTo, setConnectedTo] = useState('');
   const [connecting, setConnecting] = useState<boolean>(false);
-  const connectedRef = useRef();
+  const connectedRef = useRef<any>();
   const webSocket = useRef<WebSocket | null>(null);
   const [message, setMessage] = useState<string>('');
   const messagesRef = useRef({});
@@ -49,7 +47,6 @@ const MainWrapper = (props: props) => {
     webSocket.current.onmessage = (message) => {
       const data: any = JSON.parse(message.data);
       setSocketMessages([...socketMessages, data]);
-      //   console.log(socketMessages);
     };
     webSocket.current.onclose = () => {
       webSocket.current!.close();
@@ -75,9 +72,9 @@ const MainWrapper = (props: props) => {
         case 'removeUser':
           removeUser(data);
           break;
-        // case 'offer':
-        //   onOffer(data);
-        //   break;
+        case 'offer':
+          onOffer(data);
+          break;
         case 'answer':
           onAnswer(data);
           break;
@@ -151,6 +148,28 @@ const MainWrapper = (props: props) => {
     //TODO: Handle logging out
   };
 
+  const sendChatMessage = () => {
+    const time: string = new Date().toISOString().split('T')[0];
+    let text: Object = { time, message, name };
+    let messages: any = messagesRef.current;
+    let connectedTo: any = connectedRef.current;
+    let userMessages: any = messages[connectedTo];
+    if (messages[connectedTo]) {
+      userMessages = [...userMessages, text];
+      let newMessages = Object.assign({}, messages, {
+        [connectedTo]: userMessages,
+      });
+      messagesRef.current = newMessages;
+      setMessages(newMessages);
+    } else {
+      userMessages = Object.assign({}, messages, { [connectedTo]: [text] });
+      messagesRef.current = userMessages;
+      setMessages(userMessages);
+    }
+    props.currentChannel.send(JSON.stringify(text));
+    setMessage('');
+  };
+
   //Handeling of datachannel messages
   const onDataChannelMessage: (event: MessageEvent<any>) => any = (
     event: MessageEvent
@@ -171,6 +190,71 @@ const MainWrapper = (props: props) => {
     );
   };
 
+  const onOffer: (data: any) => void = (data: any) => {
+    setConnectedTo(data.name);
+    connectedRef.current = data.name;
+
+    props.currentConnection
+      .setRemoteDescription(new RTCSessionDescription(data.offer))
+      .then(() => props.currentConnection.createAnswer())
+      .then((answer: any) =>
+        props.currentConnection.setLocalDescription(answer)
+      )
+      .then(() =>
+        sendSocketMessage({
+          type: 'answer',
+          answer: props.currentConnection.localDescription,
+          name,
+        })
+      )
+      .catch((e: any) => {
+        console.log({ e });
+        alert('Something went wrong while trying to connect!');
+      });
+  };
+
+  const onConnect: (userName: string) => void = (userName: string) => {
+    if (connectedRef.current === userName) {
+      setConnecting(true);
+      setConnectedTo('');
+      connectedRef.current = '';
+      setConnecting(false);
+    } else {
+      setConnecting(true);
+      setConnectedTo(userName);
+      connectedRef.current = userName;
+      initializeConnection(userName);
+      setConnecting(false);
+    }
+  };
+
+  const initializeConnection: (user: string) => void = (user: string) => {
+    let dataChannel: RTCDataChannel =
+      props.currentConnection.createDataChannel('messenger');
+
+    dataChannel.onerror = (error: Event) => {
+      console.log(error);
+      alert('An error occured while initializing a connection!');
+    };
+
+    dataChannel.onmessage = onDataChannelMessage;
+    props.updateCurrentChannel(dataChannel);
+    props.currentConnection
+      .createOffer()
+      .then((offer: any) => props.currentConnection.setLocalDescription(offer))
+      .then(() =>
+        sendSocketMessage({
+          type: 'offer',
+          offer: props.currentConnection.localDescription,
+          name,
+        })
+      )
+      .catch((e: Error) => {
+        console.log(e);
+        alert('An error occured!');
+      });
+  };
+
   const sendSocketMessage = (message: Object) => {
     webSocket.current?.send(JSON.stringify(message));
   };
@@ -184,7 +268,10 @@ const MainWrapper = (props: props) => {
             logoutSubmit={() => {
               handleLogout();
             }}></Header>
-          <UserList userList={users} userName={name}></UserList>
+          <UserList
+            userList={users}
+            userName={name}
+            onConnect={onConnect}></UserList>
           <Chat></Chat>
         </div>
       ) : (

@@ -5,7 +5,7 @@ import addChatSvg from '../assets/addChat.svg';
 
 //Interface declarations
 interface propsInterface {
-  // onConnect: () => void;
+  onConnect: (userName: string) => void;
   userName: string;
   userList: Array<userEntry>;
 }
@@ -40,12 +40,15 @@ function UserList(props: propsInterface) {
       <div className={styles.list}>
         {users?.map((user: userEntry) => {
           return (
-            <>
-              <span className={styles.listUser}>
-                <span className={styles.listUserName}>{user.userName}</span>
-                <span className={styles.listUserConnect}>Connect!</span>
-              </span>
-            </>
+            <span
+              key={user.id}
+              className={styles.listUser}
+              onClick={() => {
+                props.onConnect(user.userName);
+              }}>
+              <span className={styles.listUserName}>{user.userName}</span>
+              <span className={styles.listUserConnect}>Connected?</span>
+            </span>
           );
         })}
       </div>
