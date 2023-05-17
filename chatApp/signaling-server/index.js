@@ -27,7 +27,6 @@ const broadcast = (clients, type, { id, name: userName }) => {
 };
 
 wss.on('connection', (ws) => {
-  // console.log(ws);
   ws.on('message', (msg) => {
     let data;
     try {
@@ -37,6 +36,7 @@ wss.on('connection', (ws) => {
       data = {};
     }
     const { type, name, offer, answer, candidate } = data;
+
     switch (type) {
       case 'login':
         if (users[name]) {
@@ -45,7 +45,7 @@ wss.on('connection', (ws) => {
             success: false,
             message: 'Username is not available',
           });
-          console.log('User tried to login with name: ');
+          console.log('User tried to login with name: ', name);
         } else {
           const id = uuid();
           const loggedIn = Object.values(users).map(
@@ -59,12 +59,13 @@ wss.on('connection', (ws) => {
             success: true,
             users: loggedIn,
           });
-          console.log('User successfully logged in as: ');
+          console.log('User successfully logged in as: ', name);
           broadcast(users, 'updateUsers', ws);
           console.log('Updated user list!');
         }
         break;
       case 'offer':
+        console.log('Offer:', offer);
         const offerRecipient = users[name];
         if (!!offerRecipient) {
           unicast(offerRecipient, {
@@ -80,13 +81,16 @@ wss.on('connection', (ws) => {
         }
         break;
       case 'answer':
+        console.log('Answer: ', answer);
         const answerRecipient = users[name];
         if (!!answerRecipient) {
+          console.log(`Sending answer to ${name}!`);
           unicast(answerRecipient, {
             type: 'answer',
             answer,
           });
         } else {
+          console.log(`Failed to answer ${name}!`);
           unicast(ws, {
             type: 'error',
             message: `User ${name} does not exist!`,
@@ -94,6 +98,7 @@ wss.on('connection', (ws) => {
         }
         break;
       case 'candidate':
+        console.log('Candidate: ', candidate);
         const candidateRecipient = users[name];
         if (!!candidateRecipient) {
           unicast(candidateRecipient, {

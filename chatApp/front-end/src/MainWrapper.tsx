@@ -19,8 +19,8 @@ interface userEntry {
 }
 
 //remote config (prod)
-// const configuration = {
-//   iceServers: [{ url: "stun:stun.1.google.com:19302" }]
+// const configuration: RTCConfiguration | undefined = {
+//   iceServers: [{ urls: 'stun:stun.1.google.com:19302' }],
 // };
 
 //test config (local)
@@ -179,18 +179,21 @@ const MainWrapper = (props: props) => {
   };
 
   const onAnswer: (data: any) => void = (data: any) => {
+    console.log('Answering offer\n', data);
     props.currentConnection.setRemoteDescription(
       new RTCSessionDescription(data.answer)
     );
   };
 
   const onCandidate: (data: any) => void = (data: any) => {
+    console.log('New candidate\n', data);
     props.currentConnection.addIceCandidate(
       new RTCIceCandidate(data.candidate)
     );
   };
 
   const onOffer: (data: any) => void = (data: any) => {
+    console.log('Recived offer\n', data);
     setConnectedTo(data.name);
     connectedRef.current = data.name;
 
@@ -214,6 +217,7 @@ const MainWrapper = (props: props) => {
   };
 
   const onConnect: (userName: string) => void = (userName: string) => {
+    console.log('Trying to connect to ', userName);
     if (connectedRef.current === userName) {
       setConnecting(true);
       setConnectedTo('');
@@ -271,6 +275,7 @@ const MainWrapper = (props: props) => {
           <UserList
             userList={users}
             userName={name}
+            // connectedTo={connectedTo}
             onConnect={onConnect}></UserList>
           <Chat></Chat>
         </div>
