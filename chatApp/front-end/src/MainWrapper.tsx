@@ -186,7 +186,7 @@ const MainWrapper = (props: props) => {
   };
 
   const onCandidate: (data: any) => void = (data: any) => {
-    console.log('New candidate\n', data);
+    console.log('New candidate\n', data.candidate);
     props.currentConnection.addIceCandidate(
       new RTCIceCandidate(data.candidate)
     );
@@ -196,6 +196,8 @@ const MainWrapper = (props: props) => {
     console.log('Recived offer\n', data);
     setConnectedTo(data.name);
     connectedRef.current = data.name;
+
+    console.log(props.currentConnection);
 
     props.currentConnection
       .setRemoteDescription(new RTCSessionDescription(data.offer))
@@ -245,12 +247,14 @@ const MainWrapper = (props: props) => {
     props.updateCurrentChannel(dataChannel);
     props.currentConnection
       .createOffer()
-      .then((offer: any) => props.currentConnection.setLocalDescription(offer))
+      .then((offer: any) => {
+        props.currentConnection.setLocalDescription(offer);
+      })
       .then(() =>
         sendSocketMessage({
           type: 'offer',
           offer: props.currentConnection.localDescription,
-          name,
+          user,
         })
       )
       .catch((e: Error) => {
