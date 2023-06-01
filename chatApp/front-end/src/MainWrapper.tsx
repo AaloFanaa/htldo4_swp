@@ -18,7 +18,7 @@ interface userEntry {
   userName: string;
 }
 
-//remote config (prod)
+// remote config
 // const configuration: RTCConfiguration | undefined = {
 //   iceServers: [{ urls: 'stun:stun.1.google.com:19302' }],
 // };
@@ -82,6 +82,8 @@ const MainWrapper = (props: props) => {
           onCandidate(data);
           break;
         default:
+          console.log('Unknown message type!');
+          console.log(data);
           break;
       }
     }
@@ -115,14 +117,14 @@ const MainWrapper = (props: props) => {
       setIsLoggedIn(true);
       setUsers(data.users);
       let localConnection = new RTCPeerConnection(configuration);
-      localConnection.onicecandidate = ({ candidate }) => {
+      localConnection.onicecandidate = (event: RTCPeerConnectionIceEvent) => {
         let connectedTo = connectedRef.current;
 
-        if (candidate && !!connectedTo) {
+        if (event.candidate && !!connectedTo) {
           sendSocketMessage({
             name: connectedTo,
             type: 'candidate',
-            candidate,
+            candidate: event.candidate,
           });
         }
       };
@@ -133,7 +135,7 @@ const MainWrapper = (props: props) => {
         props.updateCurrentChannel(localDataChannel);
       };
       props.updateCurrentConnection(localConnection);
-      alert(`Login was successfull!\nLogged in as: ${name}`);
+      // alert(`Login was successfull!\nLogged in as: ${name}`);
     } else {
       alert('An error occurred while trying to connect!');
     }
@@ -174,7 +176,7 @@ const MainWrapper = (props: props) => {
   };
 
   const onAnswer: (data: any) => void = (data: any) => {
-    console.log('Answering offer\n', data);
+    console.log('Answering \n', data);
     props.currentConnection!.setRemoteDescription(
       new RTCSessionDescription(data.answer)
     );
@@ -187,11 +189,10 @@ const MainWrapper = (props: props) => {
     );
   };
 
-  const onOffer: (data: any) => void = (data: any) => {
+  const onOffer: (data: any) => void = async (data: any) => {
     console.log('Recived offer\n', data);
     setConnectedTo(data.name);
     connectedRef.current = data.name;
-
     props
       .currentConnection!.setRemoteDescription(
         new RTCSessionDescription(data.offer)
@@ -204,13 +205,31 @@ const MainWrapper = (props: props) => {
         sendSocketMessage({
           type: 'answer',
           answer: props.currentConnection!.localDescription,
-          name,
+          name: name,
         })
       )
       .catch((e: any) => {
         console.log({ e });
         alert('Something went wrong while trying to connect!');
       });
+
+    // await props.currentConnection!.setRemoteDescription(
+    //   new RTCSessionDescription(data.offer)
+    // );
+    // let answer = await props.currentConnection!.createAnswer();
+    // await props.currentConnection!.setLocalDescription(answer);
+    // let description = props.currentConnection!.localDescription;
+    // console.log('Local description\n', description);
+    // console.log(
+    //   'Remote description\n',
+    //   props.currentConnection?.remoteDescription
+    // );
+    // let name: string = data.name;
+    // sendSocketMessage({
+    //   type: 'offer',
+    //   offer: description,
+    //   name: name,
+    // });
   };
 
   const onConnect: (userName: string) => void = (userName: string) => {
@@ -258,26 +277,14 @@ const MainWrapper = (props: props) => {
     //     alert('An error occured!');
     //   });
 
-    console.log('User', user);
     let offer = await props.currentConnection!.createOffer();
     await props.currentConnection!.setLocalDescription(offer);
     let description = props.currentConnection!.localDescription;
-    console.log({
-      type: 'offer',
-      offer: description,
-      user,
-    });
     sendSocketMessage({
       type: 'offer',
       offer: description,
-      user,
+      name: user,
     });
-
-    //   async () => {
-    //     await props.currentConnection!.setLocalDescription(descriptionInit);
-    //     console.log(props.currentConnection!.localDescription);
-    //   };
-    //   console.log('Description', descriptionInit!);
   };
 
   const sendSocketMessage = (message: Object) => {
@@ -292,12 +299,14 @@ const MainWrapper = (props: props) => {
             userName={name}
             logoutSubmit={() => {
               handleLogout();
-            }}></Header>
+            }}
+          ></Header>
           <UserList
             userList={users}
             userName={name}
             // connectedTo={connectedTo}
-            onConnect={onConnect}></UserList>
+            onConnect={onConnect}
+          ></UserList>
           <Chat></Chat>
         </div>
       ) : (
@@ -307,7 +316,8 @@ const MainWrapper = (props: props) => {
           }}
           onNameSubmit={() => {
             handleLogin();
-          }}></Login>
+          }}
+        ></Login>
       )}
     </>
   );

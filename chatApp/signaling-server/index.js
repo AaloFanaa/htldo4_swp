@@ -65,9 +65,9 @@ wss.on('connection', (ws) => {
         }
         break;
       case 'offer':
-        console.log('Offer:', offer);
         const offerRecipient = users[name];
         if (!!offerRecipient) {
+          console.log('Offer:' + ws.name + '\n', offer);
           unicast(offerRecipient, {
             type: 'offer',
             offer,
@@ -81,7 +81,7 @@ wss.on('connection', (ws) => {
         }
         break;
       case 'answer':
-        console.log('Answer: ', answer);
+        console.log('Answer: ' + ws.name + '\n', answer);
         const answerRecipient = users[name];
         if (!!answerRecipient) {
           console.log(`Sending answer to ${name}!`);
@@ -98,9 +98,10 @@ wss.on('connection', (ws) => {
         }
         break;
       case 'candidate':
-        console.log('Candidate: ', candidate);
         const candidateRecipient = users[name];
         if (!!candidateRecipient) {
+          console.log('Candidate: ' + name + '\n', candidate);
+          console.log('CandidateRecipient: ' + candidateRecipient.name);
           unicast(candidateRecipient, {
             type: 'candidate',
             candidate,
