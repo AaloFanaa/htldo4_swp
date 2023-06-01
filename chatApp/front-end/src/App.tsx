@@ -13,11 +13,11 @@ const ChannelContext = createContext({
 const App = () => {
   const [connection, setconnection] = useState(null);
   const [channel, setChannel] = useState(null);
-  const updateConnection = (connection: any) => {
-    setconnection(connection);
+  const updateConnection = (conct: any) => {
+    setconnection(conct);
   };
-  const updateChannel = (chnannel: any) => {
-    setChannel(channel);
+  const updateChannel = (chnnl: any) => {
+    setChannel(chnnl);
   };
 
   return (

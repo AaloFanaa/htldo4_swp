@@ -7,8 +7,8 @@ import Login from './components/Login';
 
 //Interface declaration
 interface props {
-  readonly currentConnection: any;
-  readonly currentChannel: any;
+  currentConnection: RTCPeerConnection | null;
+  currentChannel: RTCDataChannel | null;
   updateCurrentConnection: any;
   updateCurrentChannel: any;
 }
@@ -91,7 +91,6 @@ const MainWrapper = (props: props) => {
     setUsers(
       (prev: Array<userEntry>) => [...prev, data.user] as Array<userEntry>
     );
-    console.log(users);
   };
 
   const removeUser: (data: any) => void = (data: any) => {
@@ -100,7 +99,6 @@ const MainWrapper = (props: props) => {
         user !== data.user;
       })
     );
-    console.log(users);
   };
 
   const handleLogin: () => void = () => {
@@ -114,7 +112,6 @@ const MainWrapper = (props: props) => {
   const onLogin: (data: any) => void = (data: any) => {
     setLoggingIn(false);
     if (data.success) {
-      alert(`Login was successfull!\nLogged in as: ${name}`);
       setIsLoggedIn(true);
       setUsers(data.users);
       let localConnection = new RTCPeerConnection(configuration);
@@ -130,22 +127,20 @@ const MainWrapper = (props: props) => {
         }
       };
       localConnection.ondatachannel = (event: RTCDataChannelEvent) => {
-        console.log('Data channel created');
         let localDataChannel = event.channel;
-        localDataChannel.onopen = () => {
-          console.log('data channel opened');
-        };
+        localDataChannel.onopen = () => {};
         localDataChannel.onmessage = onDataChannelMessage;
         props.updateCurrentChannel(localDataChannel);
       };
       props.updateCurrentConnection(localConnection);
+      alert(`Login was successfull!\nLogged in as: ${name}`);
     } else {
       alert('An error occurred while trying to connect!');
     }
   };
 
   const handleLogout: () => void = () => {
-    //TODO: Handle logging out
+    location.reload();
   };
 
   const sendChatMessage = () => {
@@ -166,7 +161,7 @@ const MainWrapper = (props: props) => {
       messagesRef.current = userMessages;
       setMessages(userMessages);
     }
-    props.currentChannel.send(JSON.stringify(text));
+    props.currentChannel!.send(JSON.stringify(text));
     setMessage('');
   };
 
@@ -180,14 +175,14 @@ const MainWrapper = (props: props) => {
 
   const onAnswer: (data: any) => void = (data: any) => {
     console.log('Answering offer\n', data);
-    props.currentConnection.setRemoteDescription(
+    props.currentConnection!.setRemoteDescription(
       new RTCSessionDescription(data.answer)
     );
   };
 
   const onCandidate: (data: any) => void = (data: any) => {
     console.log('New candidate\n', data.candidate);
-    props.currentConnection.addIceCandidate(
+    props.currentConnection!.addIceCandidate(
       new RTCIceCandidate(data.candidate)
     );
   };
@@ -197,18 +192,18 @@ const MainWrapper = (props: props) => {
     setConnectedTo(data.name);
     connectedRef.current = data.name;
 
-    console.log(props.currentConnection);
-
-    props.currentConnection
-      .setRemoteDescription(new RTCSessionDescription(data.offer))
-      .then(() => props.currentConnection.createAnswer())
+    props
+      .currentConnection!.setRemoteDescription(
+        new RTCSessionDescription(data.offer)
+      )
+      .then(() => props.currentConnection!.createAnswer())
       .then((answer: any) =>
-        props.currentConnection.setLocalDescription(answer)
+        props.currentConnection!.setLocalDescription(answer)
       )
       .then(() =>
         sendSocketMessage({
           type: 'answer',
-          answer: props.currentConnection.localDescription,
+          answer: props.currentConnection!.localDescription,
           name,
         })
       )
@@ -234,9 +229,9 @@ const MainWrapper = (props: props) => {
     }
   };
 
-  const initializeConnection: (user: string) => void = (user: string) => {
+  const initializeConnection: (user: string) => void = async (user: string) => {
     let dataChannel: RTCDataChannel =
-      props.currentConnection.createDataChannel('messenger');
+      props.currentConnection!.createDataChannel('messenger');
 
     dataChannel.onerror = (error: Event) => {
       console.log(error);
@@ -245,22 +240,44 @@ const MainWrapper = (props: props) => {
 
     dataChannel.onmessage = onDataChannelMessage;
     props.updateCurrentChannel(dataChannel);
-    props.currentConnection
-      .createOffer()
-      .then((offer: any) => {
-        props.currentConnection.setLocalDescription(offer);
-      })
-      .then(() =>
-        sendSocketMessage({
-          type: 'offer',
-          offer: props.currentConnection.localDescription,
-          user,
-        })
-      )
-      .catch((e: Error) => {
-        console.log(e);
-        alert('An error occured!');
-      });
+    // props
+    //   .currentConnection!.createOffer()
+    //   .then((offer: RTCSessionDescriptionInit) => {
+    //     props.currentConnection!.setLocalDescription(offer);
+    //     console.log(props.currentConnection!.localDescription);
+    //   })
+    //   .then(() => {
+    //     sendSocketMessage({
+    //       type: 'offer',
+    //       offer: props.currentConnection!.localDescription,
+    //       user,
+    //     });
+    //   })
+    //   .catch((e: Error) => {
+    //     console.log(e);
+    //     alert('An error occured!');
+    //   });
+
+    console.log('User', user);
+    let offer = await props.currentConnection!.createOffer();
+    await props.currentConnection!.setLocalDescription(offer);
+    let description = props.currentConnection!.localDescription;
+    console.log({
+      type: 'offer',
+      offer: description,
+      user,
+    });
+    sendSocketMessage({
+      type: 'offer',
+      offer: description,
+      user,
+    });
+
+    //   async () => {
+    //     await props.currentConnection!.setLocalDescription(descriptionInit);
+    //     console.log(props.currentConnection!.localDescription);
+    //   };
+    //   console.log('Description', descriptionInit!);
   };
 
   const sendSocketMessage = (message: Object) => {

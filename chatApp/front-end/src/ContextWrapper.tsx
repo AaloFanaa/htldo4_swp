@@ -1,4 +1,3 @@
-import React from 'react';
 import { ConnectionConsumer, ChannelConsumer } from './App';
 import MainWrapper from './MainWrapper';
 
@@ -10,8 +9,8 @@ const ContextWrapper = () => {
           {({ channel, updateChannel }) => (
             <MainWrapper
               currentConnection={connection}
-              currentChannel={channel}
               updateCurrentConnection={updateConnection}
+              currentChannel={channel}
               updateCurrentChannel={updateChannel}></MainWrapper>
           )}
         </ChannelConsumer>
