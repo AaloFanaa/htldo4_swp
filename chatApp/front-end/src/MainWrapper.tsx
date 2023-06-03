@@ -121,6 +121,7 @@ const MainWrapper = (props: props) => {
         let connectedTo = connectedRef.current;
 
         if (event.candidate && !!connectedTo) {
+          console.log('Discovered candidate: ', event.candidate);
           sendSocketMessage({
             name: connectedTo,
             type: 'candidate',
@@ -189,7 +190,7 @@ const MainWrapper = (props: props) => {
     );
   };
 
-  const onOffer: (data: any) => void = async (data: any) => {
+  const onOffer: (data: any) => void = (data: any) => {
     console.log('Recived offer\n', data);
     setConnectedTo(data.name);
     connectedRef.current = data.name;
@@ -201,13 +202,17 @@ const MainWrapper = (props: props) => {
       .then((answer: any) =>
         props.currentConnection!.setLocalDescription(answer)
       )
-      .then(() =>
+      .then(() => {
         sendSocketMessage({
           type: 'answer',
           answer: props.currentConnection!.localDescription,
           name: name,
-        })
-      )
+        });
+        console.log(
+          'Local description: ',
+          props.currentConnection!.localDescription
+        );
+      })
       .catch((e: any) => {
         console.log({ e });
         alert('Something went wrong while trying to connect!');
