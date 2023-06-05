@@ -169,11 +169,48 @@ const MainWrapper = (props: props) => {
   };
 
   //Handeling of datachannel messages
-  const onDataChannelMessage: (event: MessageEvent<any>) => any = (
-    event: MessageEvent
-  ) => {
-    console.log(event.target);
-    //TODO: handle data messages
+  const onDataChannelMessage: (data: any) => void = (data: any) => {
+    const message = JSON.parse(data);
+    console.log('Message: ', message);
+    const { name: user } = message;
+    let messages = messagesRef.current;
+    //@ts-expect-error
+    let userMessages = messages[user];
+    if (userMessages) {
+      userMessages = [...userMessages, message];
+      let newMessages = Object.assign({}, messages, { [user]: userMessages });
+      messagesRef.current = newMessages;
+      setMessages(newMessages);
+    } else {
+      let newMessages = Object.assign({}, messages, { [user]: [message] });
+      messagesRef.current = newMessages;
+      setMessages(newMessages);
+    }
+  };
+
+  const sendDatachannelMessage = () => {
+    const time = new Date().toISOString;
+    console.log('Time: ', time);
+    let text = { time, message, name };
+    let messages = messagesRef.current;
+    let connectedTo = connectedRef.current;
+    //@ts-expect-error
+    let userMessages = messages[connectedTo];
+    //@ts-expect-error
+    if (messages[connectedTo]) {
+      userMessages = [...userMessages, text];
+      let newMessages = Object.assign({}, messages, {
+        [connectedTo]: userMessages,
+      });
+      messagesRef.current = newMessages;
+      setMessages(newMessages);
+    } else {
+      userMessages = Object.assign({}, messages, { [connectedTo]: [text] });
+      messagesRef.current = userMessages;
+      setMessages(userMessages);
+    }
+    props.currentChannel!.send(JSON.stringify(text));
+    setMessage('');
   };
 
   const onAnswer: (data: any) => void = (data: any) => {
@@ -206,7 +243,7 @@ const MainWrapper = (props: props) => {
         sendSocketMessage({
           type: 'answer',
           answer: props.currentConnection!.localDescription,
-          name: name,
+          name: data.name,
         });
         console.log(
           'Local description: ',
@@ -217,24 +254,6 @@ const MainWrapper = (props: props) => {
         console.log({ e });
         alert('Something went wrong while trying to connect!');
       });
-
-    // await props.currentConnection!.setRemoteDescription(
-    //   new RTCSessionDescription(data.offer)
-    // );
-    // let answer = await props.currentConnection!.createAnswer();
-    // await props.currentConnection!.setLocalDescription(answer);
-    // let description = props.currentConnection!.localDescription;
-    // console.log('Local description\n', description);
-    // console.log(
-    //   'Remote description\n',
-    //   props.currentConnection?.remoteDescription
-    // );
-    // let name: string = data.name;
-    // sendSocketMessage({
-    //   type: 'offer',
-    //   offer: description,
-    //   name: name,
-    // });
   };
 
   const onConnect: (userName: string) => void = (userName: string) => {
@@ -304,14 +323,12 @@ const MainWrapper = (props: props) => {
             userName={name}
             logoutSubmit={() => {
               handleLogout();
-            }}
-          ></Header>
+            }}></Header>
           <UserList
             userList={users}
             userName={name}
             // connectedTo={connectedTo}
-            onConnect={onConnect}
-          ></UserList>
+            onConnect={onConnect}></UserList>
           <Chat></Chat>
         </div>
       ) : (
@@ -321,8 +338,7 @@ const MainWrapper = (props: props) => {
           }}
           onNameSubmit={() => {
             handleLogin();
-          }}
-        ></Login>
+          }}></Login>
       )}
     </>
   );
