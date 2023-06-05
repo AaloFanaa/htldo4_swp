@@ -6,15 +6,26 @@ interface propsInterface {
   connectedUser: string;
   currentMessage: string;
   setCurrentMessage: (messageValue: string) => void;
-  messages: {};
+  messages: any;
   sendMessage: () => void;
 }
 
 function Chat(props: propsInterface) {
+  useEffect(() => {
+    console.log(
+      messageFilter(props.messages, (name: any) => (name = props.connectedUser))
+    );
+  }, [props]);
+
+  let messageFilter = (obj: any, predicate: any) =>
+    Object.keys(obj)
+      .filter((key: any) => predicate(obj[key]))
+      .reduce((res: any, key: any) => ((res[key] = obj[key]), res), {});
+
   return (
     <div className={styles.Chat}>
       <div className={styles.chatBackground}>
-        {props.connectedUser === '' ? (
+        {props.connectedUser !== '' ? (
           <div className={styles.chatPlaceholder}>
             <img className={styles.placeholderImg} src={lockSvg} alt='Lock' />
             <span className={styles.placeholderText}>
@@ -29,7 +40,7 @@ function Chat(props: propsInterface) {
                 <span> {props.connectedUser}</span>
               </div>
             </div>
-            <div className={styles.chatMessages}></div>
+            <div className={styles.chatMessages}>{}</div>
             <div className={styles.chatControls}>
               <div className={styles.controlsWrapper}>
                 <input

@@ -173,8 +173,7 @@ const MainWrapper = (props: props) => {
 
   //Handeling recived data channel messages
   const onDataChannelMessage: (data: any) => void = (data: any) => {
-    const message = JSON.parse(data);
-    console.log('Message: ', message);
+    const message = JSON.parse(data.data);
     const { name: user } = message;
     let messages = messagesRef.current;
     //@ts-expect-error
