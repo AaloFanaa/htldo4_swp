@@ -18,7 +18,7 @@
   font-size: 2rem;
 }
 
-.chatBackground > div {
+.chatPlaceholder {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -27,7 +27,103 @@
   user-select: none;
 }
 
-.chatBackground > div > img {
+.placeholderImg {
   aspect-ratio: 1;
   height: 4rem;
+}
+
+.chatBox {
+  height: 100%;
+  width: 100%;
+  display: block;
+}
+
+.chatMessages {
+  height: 80%;
+}
+
+.chatControls {
+  height: 13%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.controlsWrapper {
+  background-color: var(--bgColor);
+  width: 80%;
+  height: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0.5rem;
+  transition: 0.15s all;
+  box-shadow: 0px 0px 10px 0 rgba(0, 0, 0, 0.4);
+}
+
+.controlsWrapper > input {
+  width: 85%;
+  height: 60%;
+  background-color: var(--bgColor);
+  outline: none;
+  border: none;
+  color: var(--textColor);
+  padding-left: 0.5rem;
+}
+
+.controlsWrapper > button {
+  width: 10%;
+  height: 60%;
+  border: none;
+  background-color: var(--fgHlColor);
+  transition: 0.3s all;
+  cursor: pointer;
+  border-radius: 0.5rem;
+}
+
+.controlsWrapper > button:disabled {
+  background-color: var(--fgColor);
+  cursor: default;
+}
+
+.chatUserDisplay {
+  width: 100%;
+  height: 7%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+  cursor: default;
+}
+
+.chatUserDisplay > div {
+  background-color: var(--bgColor);
+  max-width: 35%;
+  min-width: 20%;
+  padding: 5px;
+  border-radius: 0.5rem;
+  box-shadow: 0px 0px 10px 0 rgba(0, 0, 0, 0.4);
+}
+
+.chatUserDisplay > div > span {
+  color: var(--primColor);
+  animation: nameAnimation 3.5s infinite;
+}
+
+@keyframes nameAnimation {
+  0% {
+    color: var(--primColor);
+  }
+  25% {
+    color: var(--secColor);
+  }
+  50% {
+    color: var(--tertColor);
+  }
+  75% {
+    color: var(--secColor);
+  }
+  100% {
+    color: var(--primColor);
+  }
 }

@@ -130,13 +130,16 @@ const MainWrapper = (props: props) => {
         }
       };
       localConnection.ondatachannel = (event: RTCDataChannelEvent) => {
+        console.log('Created data channel...');
         let localDataChannel = event.channel;
-        localDataChannel.onopen = () => {};
+        localDataChannel.onopen = () => {
+          console.log('Data channel open...');
+        };
         localDataChannel.onmessage = onDataChannelMessage;
         props.updateCurrentChannel(localDataChannel);
       };
       props.updateCurrentConnection(localConnection);
-      // alert(`Login was successfull!\nLogged in as: ${name}`);
+      alert(`Login was successfull!\nLogged in as: ${name}`);
     } else {
       alert('An error occurred while trying to connect!');
     }
@@ -168,7 +171,7 @@ const MainWrapper = (props: props) => {
     setMessage('');
   };
 
-  //Handeling of datachannel messages
+  //Handeling recived data channel messages
   const onDataChannelMessage: (data: any) => void = (data: any) => {
     const message = JSON.parse(data);
     console.log('Message: ', message);
@@ -188,7 +191,8 @@ const MainWrapper = (props: props) => {
     }
   };
 
-  const sendDatachannelMessage = () => {
+  //Handeling the sending of data channel messages
+  const sendDataChannelMessage = () => {
     const time = new Date().toISOString;
     console.log('Time: ', time);
     let text = { time, message, name };
@@ -245,10 +249,6 @@ const MainWrapper = (props: props) => {
           answer: props.currentConnection!.localDescription,
           name: data.name,
         });
-        console.log(
-          'Local description: ',
-          props.currentConnection!.localDescription
-        );
       })
       .catch((e: any) => {
         console.log({ e });
@@ -283,24 +283,6 @@ const MainWrapper = (props: props) => {
 
     dataChannel.onmessage = onDataChannelMessage;
     props.updateCurrentChannel(dataChannel);
-    // props
-    //   .currentConnection!.createOffer()
-    //   .then((offer: RTCSessionDescriptionInit) => {
-    //     props.currentConnection!.setLocalDescription(offer);
-    //     console.log(props.currentConnection!.localDescription);
-    //   })
-    //   .then(() => {
-    //     sendSocketMessage({
-    //       type: 'offer',
-    //       offer: props.currentConnection!.localDescription,
-    //       user,
-    //     });
-    //   })
-    //   .catch((e: Error) => {
-    //     console.log(e);
-    //     alert('An error occured!');
-    //   });
-
     let offer = await props.currentConnection!.createOffer();
     await props.currentConnection!.setLocalDescription(offer);
     let description = props.currentConnection!.localDescription;
@@ -323,13 +305,21 @@ const MainWrapper = (props: props) => {
             userName={name}
             logoutSubmit={() => {
               handleLogout();
-            }}></Header>
+            }}
+          ></Header>
           <UserList
             userList={users}
             userName={name}
-            // connectedTo={connectedTo}
-            onConnect={onConnect}></UserList>
-          <Chat></Chat>
+            connectedTo={connectedTo}
+            onConnect={onConnect}
+          ></UserList>
+          <Chat
+            connectedUser={connectedTo}
+            currentMessage={message}
+            setCurrentMessage={setMessage}
+            messages={messages}
+            sendMessage={sendChatMessage}
+          ></Chat>
         </div>
       ) : (
         <Login
@@ -338,7 +328,8 @@ const MainWrapper = (props: props) => {
           }}
           onNameSubmit={() => {
             handleLogin();
-          }}></Login>
+          }}
+        ></Login>
       )}
     </>
   );
