@@ -3,23 +3,15 @@ import styles from '../styles/Chat.module.css';
 import lockSvg from '../assets/lockIcon.svg';
 
 interface propsInterface {
+  localUser: string;
   connectedUser: string;
   currentMessage: string;
   setCurrentMessage: (messageValue: string) => void;
-  messages: any;
+  messages: Array<Object> | undefined;
   sendMessage: () => void;
 }
 
 function Chat(props: propsInterface) {
-  // useEffect(() => {
-  //   console.log('Connected user messages: ', props.messages);
-  // }, [props]);
-
-  // let messageFilter = (obj: any, predicate: any) =>
-  //   Object.keys(obj)
-  //     .filter((key: any) => predicate(obj[key]))
-  //     .reduce((res: any, key: any) => ((res[key] = obj[key]), res), {});
-
   return (
     <div className={styles.Chat}>
       <div className={styles.chatBackground}>
@@ -38,7 +30,37 @@ function Chat(props: propsInterface) {
                 <span> {props.connectedUser}</span>
               </div>
             </div>
-            <div className={styles.chatMessages}>{}</div>
+            <div className={styles.chatMessages}>
+              {props.messages?.map((message: any) => {
+                if (message.name === props.connectedUser) {
+                  return (
+                    <div
+                      className={styles.messageWrapper}
+                      key={message.name + message.time + message.message}
+                    >
+                      <span className={styles.messageText}>
+                        {message.message}
+                      </span>
+                    </div>
+                  );
+                }
+                if (message.name === props.localUser) {
+                  return (
+                    <div
+                      className={styles.messageWrapper}
+                      key={message.name + message.time + message.message}
+                    >
+                      {' '}
+                      <div className={styles.ownMessage}>
+                        <span className={styles.messageText}>
+                          {message.message}
+                        </span>
+                      </div>
+                    </div>
+                  );
+                }
+              })}
+            </div>
             <div className={styles.chatControls}>
               <div className={styles.controlsWrapper}>
                 <input
@@ -51,7 +73,8 @@ function Chat(props: propsInterface) {
                 />
                 <button
                   onClick={props.sendMessage}
-                  disabled={props.currentMessage === ''}>
+                  disabled={props.currentMessage === ''}
+                >
                   Send!
                 </button>
               </div>

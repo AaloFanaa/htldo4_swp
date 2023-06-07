@@ -149,62 +149,30 @@ const MainWrapper = (props: props) => {
     location.reload();
   };
 
+  //Handeling sent chat messages
   const sendChatMessage = () => {
-    // const time: string = new Date().toISOString().split('T')[0];
-    // let text: Object = { time, message, name };
-    // let messages: any = messagesRef.current;
-    // let connectedTo: any = connectedRef.current;
-    // let userMessages: any = messages[connectedTo];
-    // if (messages[connectedTo]) {
-    //   userMessages = [...userMessages, text];
-    //   let newMessages = Object.assign({}, messages, {
-    //     [connectedTo]: userMessages,
-    //   });
-    //   messagesRef.current = newMessages;
-    //   setMessages(newMessages);
-    // } else {
-    //   userMessages = Object.assign({}, messages, { [connectedTo]: [text] });
-    //   messagesRef.current = userMessages;
-    //   setMessages(userMessages);
-    // }
     const messageTime = new Date().toISOString;
     let messageText = message;
     let newMessage = { name: name, message: messageText, time: messageTime };
-    let newMessages: Array<Object>;
-    !!messages ? (newMessages = messages) : (newMessages = []);
+    let newMessages: Array<Object> = [];
+    if (messages !== undefined) {
+      newMessages = messages;
+    }
     newMessages.push(newMessage);
     setMessages(newMessages);
-    console.log(messages);
     props.currentChannel!.send(JSON.stringify(newMessage));
     setMessage('');
   };
 
   //Handeling recived data channel messages
   const onDataChannelMessage: (data: any) => void = (data: any) => {
-    const message = JSON.parse(data.data);
-    console.log(message);
-    let newMessages: Array<Object>;
-    !!messages ? (newMessages = messages) : (newMessages = []);
-    newMessages?.push(message);
+    const newMessage = JSON.parse(data.data);
+    let newMessages: Array<Object> = [];
+    if (messages !== undefined) {
+      newMessages = messages;
+    }
+    newMessages.push(newMessage);
     setMessages(newMessages);
-    console.log('new messages: ', messages);
-    // let messages = messagesRef.current;
-    // //@ts-expect-error
-    // let userMessages = messages[message.user];
-    // if (userMessages) {
-    //   userMessages = [...userMessages, message];
-    //   let newMessages = Object.assign({}, messages, {
-    //     [message.name]: userMessages,
-    //   });
-    //   messagesRef.current = newMessages;
-    //   setMessages(newMessages);
-    // } else {
-    //   let newMessages = Object.assign({}, messages, {
-    //     [message.name]: [message],
-    //   });
-    //   messagesRef.current = newMessages;
-    //   setMessages(newMessages);
-    // }
   };
 
   const onAnswer: (data: any) => void = (data: any) => {
@@ -268,7 +236,7 @@ const MainWrapper = (props: props) => {
 
     dataChannel.onerror = (error: Event) => {
       console.log(error);
-      alert('An error occured while initializing a connection!');
+      alert('An error occured with the data channel!');
     };
 
     dataChannel.onmessage = onDataChannelMessage;
@@ -295,18 +263,22 @@ const MainWrapper = (props: props) => {
             userName={name}
             logoutSubmit={() => {
               handleLogout();
-            }}></Header>
+            }}
+          ></Header>
           <UserList
             userList={users}
             userName={name}
             connectedTo={connectedTo}
-            onConnect={onConnect}></UserList>
+            onConnect={onConnect}
+          ></UserList>
           <Chat
+            localUser={name}
             connectedUser={connectedTo}
             currentMessage={message}
             setCurrentMessage={setMessage}
             messages={messages}
-            sendMessage={sendChatMessage}></Chat>
+            sendMessage={sendChatMessage}
+          ></Chat>
         </div>
       ) : (
         <Login
@@ -315,7 +287,8 @@ const MainWrapper = (props: props) => {
           }}
           onNameSubmit={() => {
             handleLogin();
-          }}></Login>
+          }}
+        ></Login>
       )}
     </>
   );
