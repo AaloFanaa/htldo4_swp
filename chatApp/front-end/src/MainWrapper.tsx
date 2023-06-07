@@ -38,8 +38,8 @@ const MainWrapper = (props: props) => {
   const connectedRef = useRef<any>();
   const webSocket = useRef<WebSocket | null>(null);
   const [message, setMessage] = useState<string>('');
-  const messagesRef = useRef({});
-  const [messages, setMessages] = useState({});
+  const messagesRef = useRef<any>([]);
+  const [messages, setMessages] = useState<Array<Object>>();
 
   //setup and handle socket
   useEffect(() => {
@@ -150,70 +150,61 @@ const MainWrapper = (props: props) => {
   };
 
   const sendChatMessage = () => {
-    const time: string = new Date().toISOString().split('T')[0];
-    let text: Object = { time, message, name };
-    let messages: any = messagesRef.current;
-    let connectedTo: any = connectedRef.current;
-    let userMessages: any = messages[connectedTo];
-    if (messages[connectedTo]) {
-      userMessages = [...userMessages, text];
-      let newMessages = Object.assign({}, messages, {
-        [connectedTo]: userMessages,
-      });
-      messagesRef.current = newMessages;
-      setMessages(newMessages);
-    } else {
-      userMessages = Object.assign({}, messages, { [connectedTo]: [text] });
-      messagesRef.current = userMessages;
-      setMessages(userMessages);
-    }
-    props.currentChannel!.send(JSON.stringify(text));
+    // const time: string = new Date().toISOString().split('T')[0];
+    // let text: Object = { time, message, name };
+    // let messages: any = messagesRef.current;
+    // let connectedTo: any = connectedRef.current;
+    // let userMessages: any = messages[connectedTo];
+    // if (messages[connectedTo]) {
+    //   userMessages = [...userMessages, text];
+    //   let newMessages = Object.assign({}, messages, {
+    //     [connectedTo]: userMessages,
+    //   });
+    //   messagesRef.current = newMessages;
+    //   setMessages(newMessages);
+    // } else {
+    //   userMessages = Object.assign({}, messages, { [connectedTo]: [text] });
+    //   messagesRef.current = userMessages;
+    //   setMessages(userMessages);
+    // }
+    const messageTime = new Date().toISOString;
+    let messageText = message;
+    let newMessage = { name: name, message: messageText, time: messageTime };
+    let newMessages: Array<Object>;
+    !!messages ? (newMessages = messages) : (newMessages = []);
+    newMessages.push(newMessage);
+    setMessages(newMessages);
+    console.log(messages);
+    props.currentChannel!.send(JSON.stringify(newMessage));
     setMessage('');
   };
 
   //Handeling recived data channel messages
   const onDataChannelMessage: (data: any) => void = (data: any) => {
     const message = JSON.parse(data.data);
-    const { name: user } = message;
-    let messages = messagesRef.current;
-    //@ts-expect-error
-    let userMessages = messages[user];
-    if (userMessages) {
-      userMessages = [...userMessages, message];
-      let newMessages = Object.assign({}, messages, { [user]: userMessages });
-      messagesRef.current = newMessages;
-      setMessages(newMessages);
-    } else {
-      let newMessages = Object.assign({}, messages, { [user]: [message] });
-      messagesRef.current = newMessages;
-      setMessages(newMessages);
-    }
-  };
-
-  //Handeling the sending of data channel messages
-  const sendDataChannelMessage = () => {
-    const time = new Date().toISOString;
-    console.log('Time: ', time);
-    let text = { time, message, name };
-    let messages = messagesRef.current;
-    let connectedTo = connectedRef.current;
-    //@ts-expect-error
-    let userMessages = messages[connectedTo];
-    //@ts-expect-error
-    if (messages[connectedTo]) {
-      userMessages = [...userMessages, text];
-      let newMessages = Object.assign({}, messages, {
-        [connectedTo]: userMessages,
-      });
-      messagesRef.current = newMessages;
-      setMessages(newMessages);
-    } else {
-      userMessages = Object.assign({}, messages, { [connectedTo]: [text] });
-      messagesRef.current = userMessages;
-      setMessages(userMessages);
-    }
-    props.currentChannel!.send(JSON.stringify(text));
-    setMessage('');
+    console.log(message);
+    let newMessages: Array<Object>;
+    !!messages ? (newMessages = messages) : (newMessages = []);
+    newMessages?.push(message);
+    setMessages(newMessages);
+    console.log('new messages: ', messages);
+    // let messages = messagesRef.current;
+    // //@ts-expect-error
+    // let userMessages = messages[message.user];
+    // if (userMessages) {
+    //   userMessages = [...userMessages, message];
+    //   let newMessages = Object.assign({}, messages, {
+    //     [message.name]: userMessages,
+    //   });
+    //   messagesRef.current = newMessages;
+    //   setMessages(newMessages);
+    // } else {
+    //   let newMessages = Object.assign({}, messages, {
+    //     [message.name]: [message],
+    //   });
+    //   messagesRef.current = newMessages;
+    //   setMessages(newMessages);
+    // }
   };
 
   const onAnswer: (data: any) => void = (data: any) => {
@@ -304,21 +295,18 @@ const MainWrapper = (props: props) => {
             userName={name}
             logoutSubmit={() => {
               handleLogout();
-            }}
-          ></Header>
+            }}></Header>
           <UserList
             userList={users}
             userName={name}
             connectedTo={connectedTo}
-            onConnect={onConnect}
-          ></UserList>
+            onConnect={onConnect}></UserList>
           <Chat
             connectedUser={connectedTo}
             currentMessage={message}
             setCurrentMessage={setMessage}
             messages={messages}
-            sendMessage={sendChatMessage}
-          ></Chat>
+            sendMessage={sendChatMessage}></Chat>
         </div>
       ) : (
         <Login
@@ -327,8 +315,7 @@ const MainWrapper = (props: props) => {
           }}
           onNameSubmit={() => {
             handleLogin();
-          }}
-        ></Login>
+          }}></Login>
       )}
     </>
   );

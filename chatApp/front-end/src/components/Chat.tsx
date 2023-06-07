@@ -11,21 +11,19 @@ interface propsInterface {
 }
 
 function Chat(props: propsInterface) {
-  useEffect(() => {
-    console.log(
-      messageFilter(props.messages, (name: any) => (name = props.connectedUser))
-    );
-  }, [props]);
+  // useEffect(() => {
+  //   console.log('Connected user messages: ', props.messages);
+  // }, [props]);
 
-  let messageFilter = (obj: any, predicate: any) =>
-    Object.keys(obj)
-      .filter((key: any) => predicate(obj[key]))
-      .reduce((res: any, key: any) => ((res[key] = obj[key]), res), {});
+  // let messageFilter = (obj: any, predicate: any) =>
+  //   Object.keys(obj)
+  //     .filter((key: any) => predicate(obj[key]))
+  //     .reduce((res: any, key: any) => ((res[key] = obj[key]), res), {});
 
   return (
     <div className={styles.Chat}>
       <div className={styles.chatBackground}>
-        {props.connectedUser !== '' ? (
+        {props.connectedUser === '' ? (
           <div className={styles.chatPlaceholder}>
             <img className={styles.placeholderImg} src={lockSvg} alt='Lock' />
             <span className={styles.placeholderText}>
@@ -53,8 +51,7 @@ function Chat(props: propsInterface) {
                 />
                 <button
                   onClick={props.sendMessage}
-                  disabled={props.currentMessage === ''}
-                >
+                  disabled={props.currentMessage === ''}>
                   Send!
                 </button>
               </div>
