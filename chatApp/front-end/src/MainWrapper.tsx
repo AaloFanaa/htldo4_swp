@@ -1,4 +1,4 @@
-import React, { MutableRefObject, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styles from './styles/MainWrapper.module.css';
 import Chat from './components/Chat';
 import UserList from './components/UserList';
@@ -43,6 +43,7 @@ const MainWrapper = (props: props) => {
 
   //setup and handle socket
   useEffect(() => {
+    // setMessages([]);
     webSocket.current = new WebSocket('ws://localhost:9000');
     webSocket.current.onmessage = (message) => {
       const data: any = JSON.parse(message.data);
@@ -135,7 +136,7 @@ const MainWrapper = (props: props) => {
         localDataChannel.onopen = () => {
           console.log('Data channel open...');
         };
-        localDataChannel.onmessage = onDataChannelMessage;
+        localDataChannel.onmessage = onChatMessage;
         props.updateCurrentChannel(localDataChannel);
       };
       props.updateCurrentConnection(localConnection);
@@ -153,26 +154,42 @@ const MainWrapper = (props: props) => {
   const sendChatMessage = () => {
     const messageTime = new Date().toISOString;
     let messageText = message;
-    let newMessage = { name: name, message: messageText, time: messageTime };
-    let newMessages: Array<Object> = [];
-    if (messages !== undefined) {
-      newMessages = messages;
-    }
-    newMessages.push(newMessage);
-    setMessages(newMessages);
-    props.currentChannel!.send(JSON.stringify(newMessage));
     setMessage('');
+    let newMessage = { name: name, message: messageText, time: messageTime };
+    addNewMessage(newMessage);
+    props.currentChannel!.send(JSON.stringify(newMessage));
+    // let newMessages: Array<Object> = new Array();
+    // newMessages.push(...messages!);
+    // newMessages.push(newMessage);
+    // setMessages(newMessages);
   };
 
   //Handeling recived data channel messages
-  const onDataChannelMessage: (data: any) => void = (data: any) => {
+  const onChatMessage: (data: any) => void = (data: any) => {
     const newMessage = JSON.parse(data.data);
-    let newMessages: Array<Object> = [];
+    console.log('New Message: ', newMessage);
+    addNewMessage(newMessage);
+    console.log('Messages after: ', messages);
+    // console.log('New Messages before: ', newMessages);
+    // newMessages.push(...messages!);
+    // newMessages.push(newMessage);
+    // console.log('New Mesages after: ', newMessages);
+    // console.log('Messages before: ', messages);
+    // setMessages(newMessages);
+    // console.log('Messages after: ', messages);
+  };
+
+  const addNewMessage: (message: Object) => void = (message: Object) => {
+    const initalArray: Array<Object> = [];
+    let updatedMessages: Array<Object>;
+    console.log('Messages in func: ', messages);
     if (messages !== undefined) {
-      newMessages = messages;
+      updatedMessages = [...messages!, message];
+      setMessages(updatedMessages);
+      return;
     }
-    newMessages.push(newMessage);
-    setMessages(newMessages);
+    updatedMessages = [...initalArray, message];
+    setMessages(updatedMessages);
   };
 
   const onAnswer: (data: any) => void = (data: any) => {
@@ -239,7 +256,7 @@ const MainWrapper = (props: props) => {
       alert('An error occured with the data channel!');
     };
 
-    dataChannel.onmessage = onDataChannelMessage;
+    dataChannel.onmessage = onChatMessage;
     props.updateCurrentChannel(dataChannel);
     let offer = await props.currentConnection!.createOffer();
     await props.currentConnection!.setLocalDescription(offer);

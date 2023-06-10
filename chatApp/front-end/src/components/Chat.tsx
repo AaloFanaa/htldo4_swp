@@ -12,6 +12,9 @@ interface propsInterface {
 }
 
 function Chat(props: propsInterface) {
+  useEffect(() => {
+    console.log('Prop messages:', props.messages);
+  }, [props]);
   return (
     <div className={styles.Chat}>
       <div className={styles.chatBackground}>
