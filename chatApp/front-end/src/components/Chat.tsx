@@ -7,7 +7,7 @@ interface propsInterface {
   connectedUser: string;
   currentMessage: string;
   setCurrentMessage: (messageValue: string) => void;
-  messages: Array<Object> | undefined;
+  messages: Object | undefined;
   sendMessage: () => void;
 }
 
@@ -34,7 +34,7 @@ function Chat(props: propsInterface) {
               </div>
             </div>
             <div className={styles.chatMessages}>
-              {props.messages?.map((message: any) => {
+              {/* {props.messages?.map((message: any) => {
                 if (message.name === props.connectedUser) {
                   return (
                     <div
@@ -62,7 +62,7 @@ function Chat(props: propsInterface) {
                     </div>
                   );
                 }
-              })}
+              })} */}
             </div>
             <div className={styles.chatControls}>
               <div className={styles.controlsWrapper}>

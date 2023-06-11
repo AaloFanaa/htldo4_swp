@@ -39,7 +39,7 @@ const MainWrapper = (props: props) => {
   const webSocket = useRef<WebSocket | null>(null);
   const [message, setMessage] = useState<string>('');
   const messagesRef = useRef<any>([]);
-  const [messages, setMessages] = useState<Array<Object>>();
+  const [messages, setMessages] = useState<Object>();
 
   //setup and handle socket
   useEffect(() => {
@@ -156,8 +156,11 @@ const MainWrapper = (props: props) => {
     let messageText = message;
     setMessage('');
     let newMessage = { name: name, message: messageText, time: messageTime };
+
     addNewMessage(newMessage);
+
     props.currentChannel!.send(JSON.stringify(newMessage));
+
     // let newMessages: Array<Object> = new Array();
     // newMessages.push(...messages!);
     // newMessages.push(newMessage);
@@ -167,9 +170,11 @@ const MainWrapper = (props: props) => {
   //Handeling recived data channel messages
   const onChatMessage: (data: any) => void = (data: any) => {
     const newMessage = JSON.parse(data.data);
-    console.log('New Message: ', newMessage);
+
+    // console.log('New Message: ', newMessage);
     addNewMessage(newMessage);
-    console.log('Messages after: ', messages);
+    // console.log('Messages after: ', messages);
+
     // console.log('New Messages before: ', newMessages);
     // newMessages.push(...messages!);
     // newMessages.push(newMessage);
@@ -179,17 +184,41 @@ const MainWrapper = (props: props) => {
     // console.log('Messages after: ', messages);
   };
 
-  const addNewMessage: (message: Object) => void = (message: Object) => {
-    const initalArray: Array<Object> = [];
-    let updatedMessages: Array<Object>;
-    console.log('Messages in func: ', messages);
+  const addNewMessage: (message: any) => void = (message: any) => {
+    let messageOwner = message.name;
+    let updatedMessages: any = new Object();
     if (messages !== undefined) {
-      updatedMessages = [...messages!, message];
+      updatedMessages = messages;
+      if (updatedMessages[messageOwner] !== undefined) {
+        updatedMessages[messageOwner].push(message);
+        setMessages(updatedMessages);
+        return;
+      }
+      updatedMessages[messageOwner] = [message];
       setMessages(updatedMessages);
       return;
     }
-    updatedMessages = [...initalArray, message];
+    // Object.defineProperty(updatedMessages, messageOwner, [message]);
+    updatedMessages[messageOwner] = [message];
     setMessages(updatedMessages);
+    return;
+
+    // Message object structure
+    // messages: {
+    //    name1: [{message1},{message2}]
+    //    name2: [{message1},{message2}]
+    // }
+
+    // const initalArray: Array<Object> = [];
+    // let updatedMessages: Array<Object>;
+    // console.log('Messages in func: ', messages);
+    // if (messages !== undefined) {
+    //   updatedMessages = [...messages!, message];
+    //   setMessages(updatedMessages);
+    //   return;
+    // }
+    // updatedMessages = [...initalArray, message];
+    // setMessages(updatedMessages);
   };
 
   const onAnswer: (data: any) => void = (data: any) => {
