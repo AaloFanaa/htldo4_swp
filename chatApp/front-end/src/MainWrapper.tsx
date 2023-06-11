@@ -185,7 +185,7 @@ const MainWrapper = (props: props) => {
   };
 
   const addNewMessage: (message: any) => void = (message: any) => {
-    let messageOwner = message.name;
+    let messageOwner = connectedTo;
     let updatedMessages: any = new Object();
     if (messages !== undefined) {
       updatedMessages = messages;

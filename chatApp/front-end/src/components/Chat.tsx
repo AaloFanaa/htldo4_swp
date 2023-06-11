@@ -12,9 +12,13 @@ interface propsInterface {
 }
 
 function Chat(props: propsInterface) {
+  const [localMessages, setLocalMessages] = useState<Array<Object>>();
+
   useEffect(() => {
-    console.log('Prop messages:', props.messages);
+    // @ts-expect-error
+    setLocalMessages(props.messages[props.connectedUser]);
   }, [props]);
+
   return (
     <div className={styles.Chat}>
       <div className={styles.chatBackground}>
@@ -34,35 +38,10 @@ function Chat(props: propsInterface) {
               </div>
             </div>
             <div className={styles.chatMessages}>
-              {/* {props.messages?.map((message: any) => {
-                if (message.name === props.connectedUser) {
-                  return (
-                    <div
-                      className={styles.messageWrapper}
-                      key={message.name + message.time + message.message}
-                    >
-                      <span className={styles.messageText}>
-                        {message.message}
-                      </span>
-                    </div>
-                  );
-                }
-                if (message.name === props.localUser) {
-                  return (
-                    <div
-                      className={styles.messageWrapper}
-                      key={message.name + message.time + message.message}
-                    >
-                      {' '}
-                      <div className={styles.ownMessage}>
-                        <span className={styles.messageText}>
-                          {message.message}
-                        </span>
-                      </div>
-                    </div>
-                  );
-                }
-              })} */}
+              {localMessages?.map((message) => {
+                // @ts-expect-error
+                return <span>{message.message}</span>;
+              })}
             </div>
             <div className={styles.chatControls}>
               <div className={styles.controlsWrapper}>
