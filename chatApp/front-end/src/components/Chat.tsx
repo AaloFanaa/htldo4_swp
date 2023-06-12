@@ -42,8 +42,9 @@ function Chat(props: propsInterface) {
                 props.messages[props.connectedUser].map((message: any) => {
                   return (
                     <div
-                      key={message.name + message.time}
-                      className={styles.messageWrapper}>
+                      key={message.name + message.message}
+                      className={styles.messageWrapper}
+                    >
                       {message.message}
                     </div>
                   );
@@ -66,7 +67,8 @@ function Chat(props: propsInterface) {
                 />
                 <button
                   onClick={props.sendMessage}
-                  disabled={props.currentMessage === ''}>
+                  disabled={props.currentMessage === ''}
+                >
                   Send!
                 </button>
               </div>

@@ -154,36 +154,60 @@ const MainWrapper = (props: props) => {
   const sendChatMessage = () => {
     const messageTime = new Date().toISOString;
     let messageText = message;
+    let messageSend = { name: name, message: messageText, time: messageTime };
+    // let connectedUser = connectedRef.current;
+    // let currentMessages = messagesRef.current;
+    // let updatedMessages: any = {};
+    // if (currentMessages === undefined) {
+    //   updatedMessages = { [connectedUser]: [messageSend] };
+    //   console.log(updatedMessages);
+    // } else {
+    //   if (currentMessages[connectedUser]) {
+    //     let newMessages = Object.assign({}, currentMessages, {
+    //       [connectedUser]: [messageSend],
+    //     });
+    //   }
+    // }
+    addNewMessage(messageSend, 'lol');
+    props.currentChannel!.send(JSON.stringify(messageSend));
     setMessage('');
-    let newMessage = { name: name, message: messageText, time: messageTime };
-    addNewMessage(newMessage);
-    props.currentChannel!.send(JSON.stringify(newMessage));
   };
 
   //Handeling recived data channel messages
   const onChatMessage: (data: any) => void = (data: any) => {
     const newMessage = JSON.parse(data.data);
     console.log('On chat message: ', newMessage);
-    addNewMessage(newMessage);
+    addNewMessage(newMessage, 'reciver');
   };
 
-  const addNewMessage: (message: any) => void = (message: any) => {
+  const addNewMessage: (message: any, type: string) => void = (
+    message: any,
+    type: string
+  ) => {
     let messageOwner = connectedRef.current;
-    console.log('Messge Owner: ', messageOwner);
-    console.log('Messges in func: ', messages);
+    // if (type === 'sender') {
+    //   messageOwner = message.name;
+    // }
+    // if (type === 'reciver') {
+    //   messageOwner = connectedRef.current;
+    // }
     let updatedMessages: any = new Object();
-    if (messages !== undefined) {
-      updatedMessages = messages;
+    let currentMessages = messagesRef.current;
+    if (currentMessages !== undefined) {
+      updatedMessages = currentMessages;
       if (updatedMessages[messageOwner] !== undefined) {
         updatedMessages[messageOwner].push(message);
+        messagesRef.current = updatedMessages;
         setMessages(updatedMessages);
         return;
       }
       updatedMessages[messageOwner] = [message];
+      messagesRef.current = updatedMessages;
       setMessages(updatedMessages);
       return;
     }
     updatedMessages[messageOwner] = [message];
+    messagesRef.current = updatedMessages;
     setMessages(updatedMessages);
     return;
   };
@@ -276,19 +300,22 @@ const MainWrapper = (props: props) => {
             userName={name}
             logoutSubmit={() => {
               handleLogout();
-            }}></Header>
+            }}
+          ></Header>
           <UserList
             userList={users}
             userName={name}
             connectedTo={connectedTo}
-            onConnect={onConnect}></UserList>
+            onConnect={onConnect}
+          ></UserList>
           <Chat
             localUser={name}
             connectedUser={connectedTo}
             currentMessage={message}
             setCurrentMessage={setMessage}
             messages={messages}
-            sendMessage={sendChatMessage}></Chat>
+            sendMessage={sendChatMessage}
+          ></Chat>
         </div>
       ) : (
         <Login
@@ -297,7 +324,8 @@ const MainWrapper = (props: props) => {
           }}
           onNameSubmit={() => {
             handleLogin();
-          }}></Login>
+          }}
+        ></Login>
       )}
     </>
   );
