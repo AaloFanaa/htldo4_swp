@@ -43,7 +43,6 @@ const MainWrapper = (props: props) => {
 
   //setup and handle socket
   useEffect(() => {
-    // setMessages([]);
     webSocket.current = new WebSocket('ws://localhost:9000');
     webSocket.current.onmessage = (message) => {
       const data: any = JSON.parse(message.data);
@@ -152,23 +151,10 @@ const MainWrapper = (props: props) => {
 
   //Handeling sent chat messages
   const sendChatMessage = () => {
-    const messageTime = new Date().toISOString;
+    const messageTime = new Date().toISOString();
     let messageText = message;
     let messageSend = { name: name, message: messageText, time: messageTime };
-    // let connectedUser = connectedRef.current;
-    // let currentMessages = messagesRef.current;
-    // let updatedMessages: any = {};
-    // if (currentMessages === undefined) {
-    //   updatedMessages = { [connectedUser]: [messageSend] };
-    //   console.log(updatedMessages);
-    // } else {
-    //   if (currentMessages[connectedUser]) {
-    //     let newMessages = Object.assign({}, currentMessages, {
-    //       [connectedUser]: [messageSend],
-    //     });
-    //   }
-    // }
-    addNewMessage(messageSend, 'lol');
+    addNewMessage(messageSend);
     props.currentChannel!.send(JSON.stringify(messageSend));
     setMessage('');
   };
@@ -177,20 +163,12 @@ const MainWrapper = (props: props) => {
   const onChatMessage: (data: any) => void = (data: any) => {
     const newMessage = JSON.parse(data.data);
     console.log('On chat message: ', newMessage);
-    addNewMessage(newMessage, 'reciver');
+    addNewMessage(newMessage);
   };
 
-  const addNewMessage: (message: any, type: string) => void = (
-    message: any,
-    type: string
-  ) => {
+  const addNewMessage: (message: any) => void = async (message: any) => {
     let messageOwner = connectedRef.current;
-    // if (type === 'sender') {
-    //   messageOwner = message.name;
-    // }
-    // if (type === 'reciver') {
-    //   messageOwner = connectedRef.current;
-    // }
+
     let updatedMessages: any = new Object();
     let currentMessages = messagesRef.current;
     if (currentMessages !== undefined) {
@@ -198,17 +176,17 @@ const MainWrapper = (props: props) => {
       if (updatedMessages[messageOwner] !== undefined) {
         updatedMessages[messageOwner].push(message);
         messagesRef.current = updatedMessages;
-        setMessages(updatedMessages);
+        await setMessages(updatedMessages);
         return;
       }
       updatedMessages[messageOwner] = [message];
       messagesRef.current = updatedMessages;
-      setMessages(updatedMessages);
+      await setMessages(updatedMessages);
       return;
     }
     updatedMessages[messageOwner] = [message];
     messagesRef.current = updatedMessages;
-    setMessages(updatedMessages);
+    await setMessages(updatedMessages);
     return;
   };
 

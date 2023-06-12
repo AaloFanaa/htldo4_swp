@@ -12,8 +12,6 @@ interface propsInterface {
 }
 
 function Chat(props: propsInterface) {
-  // const [localMessages, setLocalMessages] = useState<Array<Object>>();
-
   useEffect(() => {
     console.log(props);
   }, [props]);
@@ -39,16 +37,18 @@ function Chat(props: propsInterface) {
             <div className={styles.chatMessages}>
               {props.messages &&
               props.messages.hasOwnProperty(props.connectedUser) ? (
-                props.messages[props.connectedUser].map((message: any) => {
-                  return (
-                    <div
-                      key={message.name + message.message}
-                      className={styles.messageWrapper}
-                    >
-                      {message.message}
-                    </div>
-                  );
-                })
+                props.messages[props.connectedUser].map(
+                  (message: any, index: number) => {
+                    return (
+                      <div
+                        key={message.name + index}
+                        className={styles.messageWrapper}
+                      >
+                        {message.message}
+                      </div>
+                    );
+                  }
+                )
               ) : (
                 <div className={styles.chatNoMessage}>
                   <span> Start the conversation by writing something...</span>
