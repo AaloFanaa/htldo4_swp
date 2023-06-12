@@ -156,36 +156,21 @@ const MainWrapper = (props: props) => {
     let messageText = message;
     setMessage('');
     let newMessage = { name: name, message: messageText, time: messageTime };
-
     addNewMessage(newMessage);
-
     props.currentChannel!.send(JSON.stringify(newMessage));
-
-    // let newMessages: Array<Object> = new Array();
-    // newMessages.push(...messages!);
-    // newMessages.push(newMessage);
-    // setMessages(newMessages);
   };
 
   //Handeling recived data channel messages
   const onChatMessage: (data: any) => void = (data: any) => {
     const newMessage = JSON.parse(data.data);
-
-    // console.log('New Message: ', newMessage);
+    console.log('On chat message: ', newMessage);
     addNewMessage(newMessage);
-    // console.log('Messages after: ', messages);
-
-    // console.log('New Messages before: ', newMessages);
-    // newMessages.push(...messages!);
-    // newMessages.push(newMessage);
-    // console.log('New Mesages after: ', newMessages);
-    // console.log('Messages before: ', messages);
-    // setMessages(newMessages);
-    // console.log('Messages after: ', messages);
   };
 
   const addNewMessage: (message: any) => void = (message: any) => {
-    let messageOwner = connectedTo;
+    let messageOwner = connectedRef.current;
+    console.log('Messge Owner: ', messageOwner);
+    console.log('Messges in func: ', messages);
     let updatedMessages: any = new Object();
     if (messages !== undefined) {
       updatedMessages = messages;
@@ -198,27 +183,9 @@ const MainWrapper = (props: props) => {
       setMessages(updatedMessages);
       return;
     }
-    // Object.defineProperty(updatedMessages, messageOwner, [message]);
     updatedMessages[messageOwner] = [message];
     setMessages(updatedMessages);
     return;
-
-    // Message object structure
-    // messages: {
-    //    name1: [{message1},{message2}]
-    //    name2: [{message1},{message2}]
-    // }
-
-    // const initalArray: Array<Object> = [];
-    // let updatedMessages: Array<Object>;
-    // console.log('Messages in func: ', messages);
-    // if (messages !== undefined) {
-    //   updatedMessages = [...messages!, message];
-    //   setMessages(updatedMessages);
-    //   return;
-    // }
-    // updatedMessages = [...initalArray, message];
-    // setMessages(updatedMessages);
   };
 
   const onAnswer: (data: any) => void = (data: any) => {
@@ -309,22 +276,19 @@ const MainWrapper = (props: props) => {
             userName={name}
             logoutSubmit={() => {
               handleLogout();
-            }}
-          ></Header>
+            }}></Header>
           <UserList
             userList={users}
             userName={name}
             connectedTo={connectedTo}
-            onConnect={onConnect}
-          ></UserList>
+            onConnect={onConnect}></UserList>
           <Chat
             localUser={name}
             connectedUser={connectedTo}
             currentMessage={message}
             setCurrentMessage={setMessage}
             messages={messages}
-            sendMessage={sendChatMessage}
-          ></Chat>
+            sendMessage={sendChatMessage}></Chat>
         </div>
       ) : (
         <Login
@@ -333,8 +297,7 @@ const MainWrapper = (props: props) => {
           }}
           onNameSubmit={() => {
             handleLogin();
-          }}
-        ></Login>
+          }}></Login>
       )}
     </>
   );

@@ -7,16 +7,15 @@ interface propsInterface {
   connectedUser: string;
   currentMessage: string;
   setCurrentMessage: (messageValue: string) => void;
-  messages: Object | undefined;
+  messages: any;
   sendMessage: () => void;
 }
 
 function Chat(props: propsInterface) {
-  const [localMessages, setLocalMessages] = useState<Array<Object>>();
+  // const [localMessages, setLocalMessages] = useState<Array<Object>>();
 
   useEffect(() => {
-    // @ts-expect-error
-    setLocalMessages(props.messages[props.connectedUser]);
+    console.log(props);
   }, [props]);
 
   return (
@@ -38,10 +37,22 @@ function Chat(props: propsInterface) {
               </div>
             </div>
             <div className={styles.chatMessages}>
-              {localMessages?.map((message) => {
-                // @ts-expect-error
-                return <span>{message.message}</span>;
-              })}
+              {props.messages &&
+              props.messages.hasOwnProperty(props.connectedUser) ? (
+                props.messages[props.connectedUser].map((message: any) => {
+                  return (
+                    <div
+                      key={message.name + message.time}
+                      className={styles.messageWrapper}>
+                      {message.message}
+                    </div>
+                  );
+                })
+              ) : (
+                <div className={styles.chatNoMessage}>
+                  <span> Start the conversation by writing something...</span>
+                </div>
+              )}
             </div>
             <div className={styles.chatControls}>
               <div className={styles.controlsWrapper}>
@@ -55,8 +66,7 @@ function Chat(props: propsInterface) {
                 />
                 <button
                   onClick={props.sendMessage}
-                  disabled={props.currentMessage === ''}
-                >
+                  disabled={props.currentMessage === ''}>
                   Send!
                 </button>
               </div>
