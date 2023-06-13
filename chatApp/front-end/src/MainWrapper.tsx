@@ -166,27 +166,27 @@ const MainWrapper = (props: props) => {
     addNewMessage(newMessage);
   };
 
-  const addNewMessage: (message: any) => void = async (message: any) => {
+  const addNewMessage: (message: any) => void = (message: any) => {
     let messageOwner = connectedRef.current;
-
     let updatedMessages: any = new Object();
     let currentMessages = messagesRef.current;
     if (currentMessages !== undefined) {
       updatedMessages = currentMessages;
       if (updatedMessages[messageOwner] !== undefined) {
         updatedMessages[messageOwner].push(message);
+        let newObject = { ...currentMessages };
         messagesRef.current = updatedMessages;
-        await setMessages(updatedMessages);
+        setMessages(newObject);
         return;
       }
       updatedMessages[messageOwner] = [message];
       messagesRef.current = updatedMessages;
-      await setMessages(updatedMessages);
+      setMessages(updatedMessages);
       return;
     }
     updatedMessages[messageOwner] = [message];
     messagesRef.current = updatedMessages;
-    await setMessages(updatedMessages);
+    setMessages(updatedMessages);
     return;
   };
 

@@ -13,7 +13,7 @@ interface propsInterface {
 
 function Chat(props: propsInterface) {
   useEffect(() => {
-    console.log(props);
+    console.log('Props updated', props);
   }, [props]);
 
   return (
