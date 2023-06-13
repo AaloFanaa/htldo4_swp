@@ -12,12 +12,15 @@ interface propsInterface {
 }
 
 function Chat(props: propsInterface) {
-  useEffect(() => {
-    console.log('Props updated', props);
-  }, [props]);
-
   return (
-    <div className={styles.Chat}>
+    <div
+      className={styles.Chat}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' && props.currentMessage !== '') {
+          props.sendMessage();
+        }
+      }}
+    >
       <div className={styles.chatBackground}>
         {props.connectedUser === '' ? (
           <div className={styles.chatPlaceholder}>
@@ -42,9 +45,13 @@ function Chat(props: propsInterface) {
                     return (
                       <div
                         key={message.name + index}
-                        className={styles.messageWrapper}
+                        className={`${styles.messageWrapper} ${
+                          message.name === props.localUser
+                            ? styles.ownMessage
+                            : styles.otherMessage
+                        }`}
                       >
-                        {message.message}
+                        <span> {message.message}</span>
                       </div>
                     );
                   }
