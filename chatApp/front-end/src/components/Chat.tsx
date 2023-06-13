@@ -51,7 +51,14 @@ function Chat(props: propsInterface) {
                             : styles.otherMessage
                         }`}
                       >
-                        <span> {message.message}</span>
+                        <div className={styles.messageName}>
+                          {message.name === props.localUser
+                            ? 'You'
+                            : message.name}
+                        </div>
+                        <span className={styles.messageText}>
+                          {message.message}
+                        </span>
                       </div>
                     );
                   }

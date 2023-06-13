@@ -68,24 +68,36 @@
 
 .messageWrapper {
   min-height: 7%;
-  min-width: 30%;
+  min-width: 10%;
   max-width: 70%;
-  background-color: var(--fgColor);
   margin: 1rem 0rem;
   padding: 0.5rem;
   border-radius: 0.5rem;
   word-wrap: break-word;
+  font-size: 1.3rem;
+  text-align: left;
 }
 
 .ownMessage {
-  text-align: right;
   align-self: flex-end;
   margin-right: 0.5rem;
+  background-color: var(--bgColor);
 }
 
 .otherMessage {
-  text-align: left;
   align-self: flex-start;
+  background-color: var(--fgColor);
+}
+
+.otherMessage > div {
+  text-align: left;
+}
+
+.messageName {
+  text-align: right;
+  font-weight: bold;
+  width: 100%;
+  margin-bottom: 0.8rem;
 }
 
 .chatNoMessage {
