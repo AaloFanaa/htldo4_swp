@@ -20,7 +20,14 @@ interface userEntry {
 
 // remote config
 // const configuration: RTCConfiguration | undefined = {
-//   iceServers: [{ urls: 'stun:stun.1.google.com:19302' }],
+//   iceServers: [
+//     { urls: 'stun:stun.l.google.com:19302' },
+//     {
+//       urls: 'turn:turn.bistri.com:80',
+//       credential: 'homeo',
+//       username: 'homeo',
+//     },
+//   ],
 // };
 
 //test config (local)
@@ -43,6 +50,9 @@ const MainWrapper = (props: props) => {
 
   //setup and handle socket
   useEffect(() => {
+    //prod
+    // webSocket.current = new WebSocket('ws://167.235.225.10:443');
+    //dev
     webSocket.current = new WebSocket('ws://localhost:9000');
     webSocket.current.onmessage = (message) => {
       const data: any = JSON.parse(message.data);
@@ -278,22 +288,19 @@ const MainWrapper = (props: props) => {
             userName={name}
             logoutSubmit={() => {
               handleLogout();
-            }}
-          ></Header>
+            }}></Header>
           <UserList
             userList={users}
             userName={name}
             connectedTo={connectedTo}
-            onConnect={onConnect}
-          ></UserList>
+            onConnect={onConnect}></UserList>
           <Chat
             localUser={name}
             connectedUser={connectedTo}
             currentMessage={message}
             setCurrentMessage={setMessage}
             messages={messages}
-            sendMessage={sendChatMessage}
-          ></Chat>
+            sendMessage={sendChatMessage}></Chat>
         </div>
       ) : (
         <Login
@@ -302,8 +309,7 @@ const MainWrapper = (props: props) => {
           }}
           onNameSubmit={() => {
             handleLogin();
-          }}
-        ></Login>
+          }}></Login>
       )}
     </>
   );
